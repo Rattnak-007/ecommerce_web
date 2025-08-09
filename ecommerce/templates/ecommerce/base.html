@@ -99,7 +99,7 @@
         box-shadow: none;
       }
 
-      .nav-buttons .btn {
+      .nav-buttons .btn-log {
         padding: 0.5rem 1.2rem;
         border-radius: 50px;
         font-weight: 600;
@@ -107,9 +107,30 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        border: 2px solid white;
+        background: transparent;
+        color: white;
+        box-shadow: none;
       }
 
-      .nav-buttons .btn::before {
+      .nav-buttons .btn-log.btn-accent {
+        background: var(--accent);
+        color: var(--dark);
+        border: 2px solid var(--accent);
+      }
+
+      .nav-buttons .btn-log.btn-accent:hover {
+        background: #ffc233;
+        border-color: #ffc233;
+        color: var(--dark);
+      }
+
+      .nav-buttons .btn-log.btn-outline-light:hover {
+        background: white;
+        color: var(--primary);
+      }
+
+      .nav-buttons .btn-log::before {
         content: "";
         position: absolute;
         top: 0;
@@ -121,7 +142,7 @@
         transition: transform 0.3s ease;
       }
 
-      .nav-buttons .btn:hover::before {
+      .nav-buttons .btn-log:hover::before {
         transform: translateX(0);
       }
 
@@ -167,40 +188,6 @@
         align-items: center;
         justify-content: center;
       }
-
-      /* User dropdown */
-      .dropdown-menu {
-        border: none;
-        border-radius: 8px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        padding: 0.5rem 0;
-        margin-top: 0.5rem;
-        min-width: 220px;
-      }
-
-      .dropdown-item {
-        padding: 0.7rem 1.5rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-      }
-
-      .dropdown-item i {
-        width: 24px;
-        margin-right: 10px;
-        color: var(--gray);
-      }
-
-      .dropdown-item:hover {
-        background: rgba(67, 97, 238, 0.1);
-        color: var(--primary);
-      }
-
-      .dropdown-item:hover i {
-        color: var(--primary);
-      }
-
       /* Search bar */
       .search-container {
         position: relative;
@@ -237,7 +224,68 @@
         color: rgba(255, 255, 255, 0.7);
       }
 
-      /* Mobile menu */
+      /* User dropdown */
+      .dropdown.ms-2 .btn-outline-light.dropdown-toggle {
+        border: 2px solid white;
+        background: transparent;
+        color: white;
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 0.5rem 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: none;
+      }
+
+      .dropdown.ms-2 .btn-outline-light.dropdown-toggle:hover,
+      .dropdown.ms-2 .btn-outline-light.dropdown-toggle:focus {
+        background: white;
+        color: var(--primary);
+        border-color: var(--primary);
+      }
+
+      .dropdown-menu {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 0.5rem 0;
+        margin-top: 0.5rem;
+        min-width: 220px;
+        background: #fff;
+      }
+
+      .dropdown-item {
+        padding: 0.7rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        color: var(--dark);
+        border-radius: 8px;
+      }
+
+      .dropdown-item i {
+        width: 24px;
+        margin-right: 10px;
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
+      .dropdown-item:hover,
+      .dropdown-item:focus {
+        background: rgba(67, 97, 238, 0.08);
+        color: var(--primary);
+      }
+
+      .dropdown-item:hover i,
+      .dropdown-item:focus i {
+        color: var(--primary);
+      }
+
+      .dropdown-divider {
+        border-top: 1px solid var(--light-gray);
+        margin: 0.5rem 0;
+      }
+
       @media (max-width: 991px) {
         .navbar-collapse {
           padding: 1rem;
@@ -258,7 +306,7 @@
           width: 100%;
         }
 
-        .nav-buttons .btn {
+        .nav-buttons .btn-log {
           width: 100%;
           margin: 0.3rem 0;
           text-align: center;
@@ -268,12 +316,25 @@
           padding: 0.8rem 1rem;
           margin: 0.2rem 0;
         }
+
+        .dropdown.ms-2 {
+          width: 100%;
+        }
+
+        .dropdown.ms-2 .btn-outline-light.dropdown-toggle {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+
+        .dropdown-menu {
+          min-width: 100%;
+        }
       }
       .footer {
-            background: var(--dark);
-            color: rgba(255, 255, 255, 0.7);
-            padding: 4rem 0 2rem;
-        }
+        background: var(--dark);
+        color: rgba(255, 255, 255, 0.7);
+        padding: 4rem 0 2rem;
+      }
     </style>
   </head>
   <body>
@@ -283,7 +344,6 @@
         <a class="navbar-brand" href="{% url 'home' %}">
           <i class="fas fa-shopping-bag me-2"></i>Shop<span>Easy</span>
         </a>
-
         <button
           class="navbar-toggler"
           type="button"
@@ -292,7 +352,6 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
@@ -300,7 +359,7 @@
                 class="nav-link{% if request.resolver_match.url_name == 'home' %} active{% endif %}"
                 href="{% url 'home' %}"
               >
-                 Home
+                Home
               </a>
             </li>
             <li class="nav-item">
@@ -308,23 +367,17 @@
                 class="nav-link{% if request.resolver_match.url_name == 'products' %} active{% endif %}"
                 href="{% url 'products' %}"
               >
-                 Products
+                Products
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'categories' %}">
-                 Categories
-              </a>
+              <a class="nav-link" href="{% url 'categories' %}"> Categories </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'orders' %}">
-                 My Orders
-              </a>
+              <a class="nav-link" href="{% url 'orders' %}"> My Orders </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#contact">
-                 About
-              </a>
+              <a class="nav-link" href="#contact"> About </a>
             </li>
           </ul>
 
@@ -333,12 +386,10 @@
             <i class="fas fa-search"></i>
             <input type="text" placeholder="Search products..." />
           </div>
-
           <div class="nav-buttons d-flex ms-2">
             {% if request.user.is_authenticated %}
-            <a href="{% url 'cart' %}" class="btn btn-outline-light cart-icon">
-              <i class="fas fa-shopping-cart"></i>
-              <span class="cart-count">3</span>
+            <a href="{% url 'cart' %}" class="btn-log btn-outline-light">
+              <i class="fas fa-shopping-cart"></i> Cart
             </a>
             <!-- User Dropdown -->
             <div class="dropdown ms-2">
@@ -349,10 +400,9 @@
                 id="userDropdown"
                 data-bs-toggle="dropdown"
               >
-                <i class="fas fa-user-circle me-1"></i> {{ request.user.username
-                }}
+                <i class="fas fa-user-circle me-1"></i>
+                {{ request.user.name|default:"User" }}
               </a>
-
               <ul class="dropdown-menu dropdown-menu-end">
                 <li>
                   <a class="dropdown-item" href="#">
@@ -383,10 +433,10 @@
               </ul>
             </div>
             {% else %}
-            <a href="{% url 'login' %}" class="btn btn-outline-light">
+            <a href="{% url 'login' %}" class="btn-log btn-outline-light">
               <i class="fas fa-sign-in-alt me-1"></i> Login
             </a>
-            <a href="{% url 'register' %}" class="btn btn-accent ms-2">
+            <a href="{% url 'register' %}" class="btn-log btn-accent ms-2">
               <i class="fas fa-user-plus me-1"></i> Register
             </a>
             {% endif %}

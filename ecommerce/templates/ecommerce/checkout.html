@@ -1,0 +1,64 @@
+{% extends 'ecommerce/base.html' %}
+{% load math_filters %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<h2 class="mb-4 text-center">Checkout & Payment</h2>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <strong>Order Summary</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered align-middle mb-4">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ item.product.price|floatformat:2 }}</td>
+                            <td>${{ item.product.price|mul:item.quantity|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td><strong>${{ cart_total|floatformat:2 }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <strong>Payment Details</strong>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'process_payment' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="paymentMethod" class="form-label">Choose Payment Method</label>
+                        <select class="form-select" id="paymentMethod" name="payment_method" required>
+                            <option value="" disabled selected>Select a payment method</option>
+                            <option value="credit_card">Credit Card</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="cash_on_delivery">Cash on Delivery</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Pay ${{ cart_total|floatformat:2 }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

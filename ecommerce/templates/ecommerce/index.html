@@ -1,0 +1,58 @@
+{% extends 'ecommerce/base.html' %}
+{% block title %}Welcome{% endblock %}
+{% block hero %}
+<section class="hero-section py-5" style="background: url('/static/images/10037c4841973961d529d2e1aa5078f1.jpg') center center/cover no-repeat; min-height: 400px;">
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="min-height: 400px;">
+            <div class="col-lg-8 text-center text-white" style="background: rgba(0,0,0,0.4); border-radius: 1rem; padding: 2rem;">
+                <h1 class="display-3 fw-bold mb-3">Welcome to <span class="text-warning">ShopEasy</span></h1>
+                <p class="lead mb-4">Discover amazing deals on high-quality products, delivered fast and safe.</p>
+                <a href="{% url 'products' %}" class="btn btn-warning btn-lg px-4 me-2 shadow">Shop Now</a>
+                <a href="#features" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block content %}
+<section id="features" class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-4">
+            <div class="col">
+                <h2 class="fw-bold">Why Shop With Us?</h2>
+                <p class="text-muted">Experience the best online shopping with ShopEasy</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-shipping-fast fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title fw-bold">Fast Delivery</h5>
+                        <p class="card-text">Get your products delivered quickly and safely to your doorstep.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-tags fa-2x text-success mb-3"></i>
+                        <h5 class="card-title fw-bold">Best Prices</h5>
+                        <p class="card-text">Enjoy unbeatable prices and exclusive deals every day.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-star fa-2x text-warning mb-3"></i>
+                        <h5 class="card-title fw-bold">Quality Products</h5>
+                        <p class="card-text">Shop from a wide range of top-rated, high-quality products.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

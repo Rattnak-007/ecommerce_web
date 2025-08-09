@@ -136,8 +136,7 @@ class HomeView(TemplateView):
     template_name = 'ecommerce/index.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.is_staff:
-            return redirect('admin_dashboard')
+        # Remove redirect to 'admin_dashboard'
         return super().dispatch(request, *args, **kwargs)
 
 class AdminDashboardView(TemplateView):
@@ -295,4 +294,5 @@ def process_payment(request):
         cart_items.delete()
         messages.success(request, "Payment successful! Thank you for your order.")
         return redirect('orders')
+    return redirect('checkout')
     return redirect('checkout')

@@ -7,6 +7,7 @@ from .views import (
     add_to_cart, OrderDetailView, CheckoutView, update_cart, remove_from_cart, book_cart, process_payment,
     OrderListView
 )
+from . import views
 
 router = DefaultRouter()
 router.register('customers', CustomerViewSet)
@@ -17,7 +18,7 @@ router.register('payments', PaymentViewSet)
 router.register('carts', CartViewSet)
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
+    path('', views.HomeView.as_view(), name='home'),  # Index page at /
     path('api/', include(router.urls)),
     path('api/register/', RegisterView.as_view(), name='api_register'),  # API endpoint
     path('api/login/', LoginView.as_view(), name='api_login'),           # API endpoint
@@ -29,7 +30,6 @@ urlpatterns = [
     path('products/', ProductListView.as_view(), name='products'),
     path('cart/', CartView.as_view(), name='cart'),
 
-    path('admin-dashboard/', AdminDashboardView.as_view(), name='admin_dashboard'),
     path('logout/', logout_view, name='logout'),  # <-- added logout path
 
     path('categories/', CategoryListView.as_view(), name='categories'),

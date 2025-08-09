@@ -1,28 +1,4 @@
-{% extends 'ecommerce/base.html' %} 
-{% block title %} Welcome to ShopEasy {% endblock %} {% block hero %}
-<section
-  class="hero-section"
-  style="
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-      url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80')
-        center/cover;
-  "
->
-  <div class="container">
-    <div class="hero-content">
-      <h1>Welcome to <span class="highlight">ShopEasy</span></h1>
-      <p>
-        Discover amazing deals on high-quality products, delivered fast and
-        safe.
-      </p>
-      <div class="hero-buttons">
-        <a href="{% url 'products' %}" class="btn btn-primary">Shop Now</a>
-        <a href="#features" class="btn btn-secondary">Learn More</a>
-      </div>
-    </div>
-  </div>
-</section>
-{% endblock %} {% block content %}
+{% extends 'ecommerce/base.html' %} {% block title %} Welcome to ShopEasy {% endblock %} {% block hero %} {% include 'ecommerce/slide-show.html' %} {% endblock %} {% block content %}
 <style>
   :root {
     --primary: #4361ee;
@@ -37,75 +13,6 @@
     --border-radius: 12px;
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
-  }
-
-  /* Hero Section */
-  .hero-section {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    color: white;
-  }
-
-  .hero-section::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(
-      circle at top right,
-      transparent 20%,
-      rgba(0, 0, 0, 0.6) 150%
-    );
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 700px;
-    padding: 2rem;
-    animation: fadeInUp 1s ease;
-  }
-
-  .hero-content h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-  }
-
-  .hero-content .highlight {
-    color: var(--accent);
-    position: relative;
-    display: inline-block;
-  }
-
-  .hero-content .highlight::after {
-    content: "";
-    position: absolute;
-    bottom: 5px;
-    left: 0;
-    width: 100%;
-    height: 12px;
-    background: rgba(255, 209, 102, 0.3);
-    z-index: -1;
-    border-radius: 3px;
-  }
-
-  .hero-content p {
-    font-size: 1.3rem;
-    margin-bottom: 2.5rem;
-    opacity: 0.9;
-    max-width: 90%;
-  }
-
-  .hero-buttons {
-    display: flex;
-    gap: 1rem;
   }
 
   .btn {
@@ -581,7 +488,6 @@
     }
   }
 </style>
-
 <section id="features" class="features-section">
   <div class="container">
     <div class="section-header">

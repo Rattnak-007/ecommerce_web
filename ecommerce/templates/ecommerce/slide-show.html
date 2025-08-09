@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopEasy - Hero Slider</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .hero-slider {
+        position: relative;
+        height: 100vh;
+        max-height: 800px;
+        overflow: hidden;
+      }
+
+      .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .slide.active {
+        opacity: 1;
+        z-index: 1;
+      }
+
+      .container-1 {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 15px;
+        animation: fadeInUp 1s ease-out;
+      }
+
+      h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        color: #fff;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .highlight {
+        color: #ff6b6b;
+        position: relative;
+      }
+
+      .highlight::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #ff6b6b;
+        border-radius: 2px;
+      }
+
+      .paragraph {
+        font-size: 1.5rem;
+        color: #f0f0f0;
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+
+      .hero-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+      }
+
+      .btn-show {
+        display: inline-block;
+        padding: 15px 35px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-primary-show {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+        color: white;
+        border: 2px solid #ff6b6b;
+      }
+
+      .btn-primary-show:hover {
+        background: linear-gradient(45deg, #ff8e53, #ff6b6b);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+      }
+
+      .btn-secondary-show {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+      }
+
+      .btn-secondary-show:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+      }
+
+      .slider-nav {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 10px;
+      }
+
+      .slider-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .slider-dot.active {
+        background: #ff6b6b;
+        transform: scale(1.2);
+      }
+
+      .slider-arrows {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        z-index: 10;
+        transform: translateY(-50%);
+      }
+
+      .arrow {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .arrow:hover {
+        background: rgba(255, 107, 107, 0.7);
+        transform: scale(1.1);
+      }
+
+      /* Slide backgrounds */
+      .slide-1 {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+          url("https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80")
+            center/cover;
+      }
+
+      .slide-2 {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+          url("https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80")
+            center/cover;
+      }
+
+      .slide-3 {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+          url("https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80")
+            center/cover;
+      }
+
+      .slide-4 {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+          url("https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80")
+            center/cover;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .paragraph {
+          font-size: 1.1rem;
+        }
+
+        .btn-show {
+          padding: 12px 25px;
+          font-size: 1rem;
+        }
+
+        .hero-content {
+          padding: 25px;
+        }
+
+        .arrow {
+          width: 40px;
+          height: 40px;
+          font-size: 1.2rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 2rem;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero-slider">
+      <!-- Slide 1 -->
+      <div class="slide slide-1 active">
+        <div class="container-1">
+          <div class="hero-content">
+            <h1>Welcome to <span class="highlight">ShopEasy</span></h1>
+            <p class="paragraph">
+              Discover amazing deals on high-quality products, delivered fast
+              and safe.
+            </p>
+            <div class="hero-buttons">
+              <a href="#" class="btn-show btn-primary-show">Shop Now</a>
+              <a href="#features" class="btn-show btn-secondary-show">Learn More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="slide slide-2">
+        <div class="container-1">
+          <div class="hero-content">
+            <h1>Summer <span class="highlight">Sale</span> is Live!</h1>
+            <p class="paragraph">
+              Enjoy up to 50% off on top brands. Limited time offer - don't miss
+              out!
+            </p>
+            <div class="hero-buttons">
+              <a href="#" class="btn-show btn-primary-show">View Deals</a>
+              <a href="#features" class="btn-show btn-secondary-show">New Arrivals</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="slide slide-3">
+        <div class="container-1">
+          <div class="hero-content">
+            <h1>Premium <span class="highlight">Quality</span> Guaranteed</h1>
+            <p class="paragraph">
+              We source only the finest products with 100% satisfaction
+              guarantee.
+            </p>
+            <div class="hero-buttons">
+              <a href="#" class="btn-show btn-primary-show">Our Collection</a>
+              <a href="#features" class="btn-show btn-secondary-show">Customer Reviews</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="slide slide-4">
+        <div class="container-1">
+          <div class="hero-content">
+            <h1>Fast & Free <span class="highlight">Delivery</span></h1>
+            <p class="highlight">
+              Get your orders delivered to your doorstep in record time. No
+              minimum purchase!
+            </p>
+            <div class="hero-buttons">
+              <a href="#" class="btn-show btn-primary-show">Track Order</a>
+              <a href="#features" class="btn-show btn-secondary-show">Shipping Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation arrows -->
+      <div class="slider-arrows">
+        <div class="arrow prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="arrow next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+
+      <!-- Dots navigation -->
+      <div class="slider-nav">
+        <div class="slider-dot active" data-slide="0"></div>
+        <div class="slider-dot" data-slide="1"></div>
+        <div class="slider-dot" data-slide="2"></div>
+        <div class="slider-dot" data-slide="3"></div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const slides = document.querySelectorAll(".slide");
+        const dots = document.querySelectorAll(".slider-dot");
+        const prevBtn = document.querySelector(".prev");
+        const nextBtn = document.querySelector(".next");
+        let currentSlide = 0;
+        let slideInterval;
+
+        // Function to show a specific slide
+        function showSlide(index) {
+          // Reset all slides and dots
+          slides.forEach((slide) => slide.classList.remove("active"));
+          dots.forEach((dot) => dot.classList.remove("active"));
+
+          // Show the selected slide and update dot
+          slides[index].classList.add("active");
+          dots[index].classList.add("active");
+
+          currentSlide = index;
+        }
+
+        // Next slide function
+        function nextSlide() {
+          let nextIndex = (currentSlide + 1) % slides.length;
+          showSlide(nextIndex);
+        }
+
+        // Previous slide function
+        function prevSlide() {
+          let prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+          showSlide(prevIndex);
+        }
+
+        // Start auto sliding
+        function startSlider() {
+          slideInterval = setInterval(nextSlide, 3000);
+        }
+
+        // Stop auto sliding
+        function stopSlider() {
+          clearInterval(slideInterval);
+        }
+
+        // Event listeners for arrows
+        nextBtn.addEventListener("click", () => {
+          stopSlider();
+          nextSlide();
+          startSlider();
+        });
+
+        prevBtn.addEventListener("click", () => {
+          stopSlider();
+          prevSlide();
+          startSlider();
+        });
+
+        // Event listeners for dots
+        dots.forEach((dot) => {
+          dot.addEventListener("click", function () {
+            stopSlider();
+            const slideIndex = parseInt(this.getAttribute("data-slide"));
+            showSlide(slideIndex);
+            startSlider();
+          });
+        });
+
+        // Start the slider automatically
+        startSlider();
+
+        // Pause on hover
+        const slider = document.querySelector(".hero-slider");
+        slider.addEventListener("mouseenter", stopSlider);
+        slider.addEventListener("mouseleave", startSlider);
+      });
+    </script>
+  </body>
+</html>

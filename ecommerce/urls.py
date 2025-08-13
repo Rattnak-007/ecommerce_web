@@ -5,7 +5,9 @@ from .views import (
     RegisterView, LoginView, ProductListView, CartView, HomeView,
     LoginPageView, RegisterPageView, AdminDashboardView, logout_view, CategoryListView, CategoryDetailView,
     add_to_cart, OrderDetailView, CheckoutView, update_cart, remove_from_cart, book_cart, process_payment,
-    OrderListView, FeatureProductViewSet
+    OrderListView, FeatureProductViewSet, about,
+    admin_edit_product, admin_delete_product,
+    admin_edit_feature_product, admin_delete_feature_product,
 )
 from . import views
 
@@ -50,7 +52,13 @@ urlpatterns = [
     path('checkout/process/', process_payment, name='process_payment'),
 
     path('orders/', OrderListView.as_view(), name='orders'),
+    path('about/', about, name='about'),
 
     path('admin-dashboard/', AdminDashboardView.as_view(), name='admin_dashboard'),
+
+    path('admin-dashboard/product/edit/<int:product_id>/', admin_edit_product, name='admin_edit_product'),
+    path('admin-dashboard/product/delete/<int:product_id>/', admin_delete_product, name='admin_delete_product'),
+    path('admin-dashboard/feature-product/edit/<int:feature_product_id>/', admin_edit_feature_product, name='admin_edit_feature_product'),
+    path('admin-dashboard/feature-product/delete/<int:feature_product_id>/', admin_delete_feature_product, name='admin_delete_feature_product'),
 ]
 

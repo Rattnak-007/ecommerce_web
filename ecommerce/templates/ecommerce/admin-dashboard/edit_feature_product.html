@@ -1,0 +1,51 @@
+{% extends 'ecommerce/base.html' %}
+{% block title %}Edit Feature Product{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2>Edit Feature Product</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input type="text" name="name" class="form-control" value="{{ feature_product.name }}" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Category</label>
+      <select name="category" class="form-select" required>
+        {% for cat in categories %}
+        <option value="{{ cat.category_id }}" {% if feature_product.category.category_id == cat.category_id %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Price</label>
+      <input type="number" name="price" class="form-control" value="{{ feature_product.price }}" step="0.01" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Discount</label>
+      <input type="number" name="discount" class="form-control" value="{{ feature_product.discount }}" step="0.01">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Stock</label>
+      <input type="number" name="stock" class="form-control" value="{{ feature_product.stock }}" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea name="description" class="form-control">{{ feature_product.description }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Image</label>
+      <input type="file" name="image" class="form-control">
+      {% if feature_product.image %}
+      <img src="{{ feature_product.image.url }}" alt="Feature Product Image" style="max-width:120px;margin-top:10px;">
+      {% endif %}
+    </div>
+    <div class="mb-3 form-check">
+      <input type="checkbox" name="is_available" class="form-check-input" id="is_available" {% if feature_product.is_available %}checked{% endif %}>
+      <label class="form-check-label" for="is_available">Available</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

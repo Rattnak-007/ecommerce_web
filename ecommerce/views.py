@@ -1,4 +1,8 @@
 from rest_framework import viewsets
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product, Feature_Product, Category
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Customer, Category, Product, Order, Payment, Cart, CartItem, Feature_Product
 from .serializers import (
     CustomerSerializer, CategorySerializer, ProductSerializer, OrderSerializer,
@@ -62,6 +66,29 @@ class ProductListView(ListView):
 
 class RegisterPageView(TemplateView):
     template_name = 'ecommerce/register.html'
+
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        from .models import Customer
+        if Customer.objects.filter(name=name).exists():
+            return render(request, self.template_name, {'error': 'Username already exists'})
+        customer = Customer.objects.create_user(
+            name=name,
+            email=email,
+            password=password,
+            phone=phone,
+            address=address,
+            is_staff=False
+        )
+        login(request, customer)
+        return redirect('products')
+
+class AboutPageView(TemplateView):
+    template_name = 'ecommerce/about.html'
 
     def post(self, request, *args, **kwargs):
         name = request.POST.get('name')
@@ -171,7 +198,7 @@ class AdminDashboardView(LoginRequiredMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        from .models import Category, Product
+        from .models import Category, Product, Feature_Product
         # Add Category
         if 'add_category' in request.POST:
             name = request.POST.get('category_name')
@@ -202,6 +229,34 @@ class AdminDashboardView(LoginRequiredMixin, TemplateView):
                     product.save()
                 except Category.DoesNotExist:
                     pass
+
+        # Add Feature Product
+        if 'add_feature_product' in request.POST:
+            name = request.POST.get('feature_name')
+            category_id = request.POST.get('feature_category')
+            price = request.POST.get('feature_price')
+            discount = request.POST.get('feature_discount') or 0
+            stock = request.POST.get('feature_stock')
+            description = request.POST.get('feature_description')
+            image = request.FILES.get('feature_image')
+            if name and category_id and price and stock:
+                try:
+                    category = Category.objects.get(pk=category_id)
+                    feature_product = Feature_Product(
+                        name=name,
+                        category=category,
+                        price=price,
+                        discount=discount,
+                        stock=stock,
+                        description=description or "",
+                        is_available=True,
+                    )
+                    if image:
+                        feature_product.image = image
+                    feature_product.save()
+                except Category.DoesNotExist:
+                    pass
+
         return redirect('admin_dashboard')
 
     def get_context_data(self, **kwargs):
@@ -397,3 +452,67 @@ def process_payment(request):
         messages.success(request, "Payment successful! Thank you for your order.")
         return redirect('orders')
     return redirect('checkout')
+
+def staff_required(view_func):
+    return user_passes_test(lambda u: u.is_staff, login_url='login')(view_func)
+
+@staff_required
+def admin_edit_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        product.name = request.POST.get('name')
+        product.price = request.POST.get('price')
+        product.stock = request.POST.get('stock')
+        product.description = request.POST.get('description')
+        category_id = request.POST.get('category')
+        if category_id:
+            product.category = get_object_or_404(Category, pk=category_id)
+        if 'image' in request.FILES:
+            product.image = request.FILES['image']
+        product.is_available = bool(request.POST.get('is_available'))
+        product.save()
+        messages.success(request, "Product updated successfully.")
+        return redirect('admin_dashboard')
+    return render(request, 'ecommerce/admin-dashboard/edit_product.html', {'product': product, 'categories': categories})
+
+@staff_required
+def admin_delete_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, "Product deleted successfully.")
+        return redirect('admin_dashboard')
+    return redirect('admin_dashboard')
+
+@staff_required
+def admin_edit_feature_product(request, feature_product_id):
+    feature_product = get_object_or_404(Feature_Product, pk=feature_product_id)
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        feature_product.name = request.POST.get('name')
+        feature_product.price = request.POST.get('price')
+        feature_product.discount = request.POST.get('discount')
+        feature_product.stock = request.POST.get('stock')
+        feature_product.description = request.POST.get('description')
+        category_id = request.POST.get('category')
+        if category_id:
+            feature_product.category = get_object_or_404(Category, pk=category_id)
+        if 'image' in request.FILES:
+            feature_product.image = request.FILES['image']
+        feature_product.is_available = bool(request.POST.get('is_available'))
+        feature_product.save()
+        messages.success(request, "Feature product updated successfully.")
+        return redirect('admin_dashboard')
+    return render(request, 'ecommerce/admin-dashboard/edit_feature_product.html', {'feature_product': feature_product, 'categories': categories})
+
+@staff_required
+def admin_delete_feature_product(request, feature_product_id):
+    feature_product = get_object_or_404(Feature_Product, pk=feature_product_id)
+    if request.method == 'POST':
+        feature_product.delete()
+        messages.success(request, "Feature product deleted successfully.")
+        return redirect('admin_dashboard')
+    return redirect('admin_dashboard')
+
+about = AboutPageView.as_view()

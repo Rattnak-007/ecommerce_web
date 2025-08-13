@@ -1,0 +1,93 @@
+{% extends 'ecommerce/base.html' %} {% block title %}Loading...{% endblock %} {% block content %}
+<style>
+  .loading-container {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #4361ee 0%, #ffd166 100%);
+    border-radius: 18px;
+    margin: 40px auto;
+    max-width: 500px;
+    box-shadow: 0 8px 32px rgba(67, 97, 238, 0.13);
+    padding: 60px 30px;
+    position: relative;
+  }
+  .loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #4361ee;
+    border-right: 8px solid #ffd166;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    animation: spin 1.1s linear infinite;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 16px rgba(67, 97, 238, 0.13);
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .loading-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4361ee;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+    text-align: center;
+  }
+  .loading-text {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .loading-dots {
+    display: inline-block;
+    font-size: 2rem;
+    color: #ffd166;
+    letter-spacing: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+    animation: blink 1.2s infinite steps(3, start);
+  }
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+</style>
+<div class="loading-container">
+  <div class="loader" id="loader"></div>
+  <div class="loading-title" id="loading-title">Loading</div>
+  <div class="loading-text" id="loading-text">
+    Please wait while we prepare your experience
+    <span class="loading-dots" id="loading-dots">...</span>
+  </div>
+</div>
+<script>
+  // Animate loading dots (optional, for extra effect)
+  (function () {
+    var dots = document.getElementById("loading-dots");
+    var count = 0;
+    setInterval(function () {
+      count = (count + 1) % 4;
+      dots.textContent = ".".repeat(count === 0 ? 3 : count);
+    }, 400);
+  })();
+
+  //Optional: Simulate loading and redirect after 2 seconds
+   setTimeout(function () {
+     window.location.href = "{% url 'home' %}";
+   }, 2000);
+</script>
+{% endblock %}

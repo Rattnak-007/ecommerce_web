@@ -2,12 +2,15 @@
 <style>
   /* Page title */
   h2 {
+    font-size: 32px;
+    padding: 30px;
     font-weight: 600;
     color: #2c3e50;
   }
 
   /* Product card styling */
   .product-card {
+    padding: 20px;
     border: none;
     border-radius: 12px;
     background: #fff;
@@ -66,8 +69,8 @@
 
   /* Add to cart button */
   .btn-success {
-    border-radius: 8px;
-    padding: 6px 14px;
+    border-radius: 50px;
+    padding: 16px 20px;
     font-size: 14px;
     transition: 0.2s ease;
   }
@@ -82,7 +85,7 @@
     font-size: 15px;
     background: #f8f9fa;
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 50px;
   }
 </style>
 <h2 class="mb-4 text-center">Products</h2>
@@ -113,7 +116,7 @@
             <a
               href="{% url 'add_to_cart' product.product_id %}"
               class="btn btn-sm btn-success"
-              >Add to Cart</a
+              ><i class="fas fa-shopping-cart"></i></a
             >
           </div>
         </div>

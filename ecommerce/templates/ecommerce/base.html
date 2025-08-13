@@ -381,7 +381,7 @@
               <a class="nav-link" href="{% url 'orders' %}"> My Orders </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#contact"> About </a>
+              <a class="nav-link" href="{% url 'about' %}"> About </a>
             </li>
           </ul>
 
@@ -393,7 +393,7 @@
           <div class="nav-buttons d-flex ms-2">
             {% if request.user.is_authenticated %}
             <a href="{% url 'cart' %}" class="btn-log btn-outline-light">
-              <i class="fas fa-shopping-cart"></i> Cart
+              <i class="fas fa-shopping-cart"></i>
             </a>
             <!-- User Dropdown -->
             <div class="dropdown ms-2">

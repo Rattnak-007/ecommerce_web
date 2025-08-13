@@ -1,128 +1,16 @@
-{% extends 'ecommerce/base.html' %} {% load static %} {% block title %}Admin Dashboard {% endblock %} 
-{% block content %}
+{% extends 'ecommerce/base.html' %} {% load static %} {% block title %} Admin
+Dashboard {% endblock %} {% block content %}
 <style>
-  /* Dashboard Main Styling */
+  /* General Styles */
   body {
     background: #f4f7fa;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
-
-  /* Header */
   h2,
   h4 {
     font-weight: 700;
     color: #2d3748;
     letter-spacing: -1px;
-  }
-
-  /* Card Grid */
-  .row.mb-4 > .col-md-2 {
-    margin-bottom: 1rem;
-  }
-
-  /* Stat Cards */
-  .card {
-    border: none;
-    border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(67, 97, 238, 0.08),
-      0 1.5px 6px rgba(0, 0, 0, 0.03);
-    transition: transform 0.2s, box-shadow 0.2s;
-    background: #fff;
-  }
-
-  .card:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 8px 32px rgba(67, 97, 238, 0.13),
-      0 3px 12px rgba(0, 0, 0, 0.06);
-  }
-
-  .card .card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #6c757d;
-    margin-bottom: 0.5rem;
-  }
-
-  .card .display-6 {
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: #4361ee;
-    margin-bottom: 0;
-  }
-
-  /* Table Styling */
-  .table {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 0;
-    box-shadow: 0 2px 12px rgba(67, 97, 238, 0.04);
-  }
-
-  .table th {
-    background: linear-gradient(90deg, #4361ee 80%, #ffd166 100%);
-    color: #fff;
-    font-weight: 600;
-    border: none;
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-  }
-
-  .table td {
-    vertical-align: middle;
-    font-size: 0.98rem;
-    color: #2d3748;
-    border-top: 1px solid #f1f5ff;
-  }
-
-  .table-hover tbody tr:hover {
-    background: #f1f5ff;
-    transition: background 0.2s;
-  }
-
-  .table-responsive {
-    border-radius: 12px;
-    overflow-x: auto;
-    margin-bottom: 2rem;
-  }
-
-  /* Badges */
-  .badge {
-    padding: 6px 14px;
-    font-size: 0.92rem;
-    border-radius: 8px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-
-  .bg-success {
-    background: #06d6a0 !important;
-    color: #fff !important;
-  }
-
-  .bg-danger {
-    background: #ff6b6b !important;
-    color: #fff !important;
-  }
-
-  .bg-primary {
-    background: #4361ee !important;
-    color: #fff !important;
-  }
-
-  .bg-secondary {
-    background: #718096 !important;
-    color: #fff !important;
-  }
-
-  /* Section Titles */
-  h4 {
-    margin-top: 2.5rem;
-    margin-bottom: 1.2rem;
-    color: #4361ee;
-    font-weight: 700;
-    border-left: 5px solid #ffd166;
-    padding-left: 12px;
   }
 
   /* Info Card */
@@ -135,97 +23,151 @@
     margin-bottom: 2rem;
     text-align: center;
   }
-
   .info-card h3 {
     font-size: 2.2rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
   }
-
   .info-card p {
     font-size: 1.1rem;
     margin-bottom: 0;
   }
 
-  /* Dashboard Form Section */
+  /* Cards */
+  .card,
   .dashboard-form-section {
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(67, 97, 238, 0.08);
     background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 2px 12px rgba(67, 97, 238, 0.06);
-    padding: 2rem 1.5rem;
-    margin-bottom: 2.5rem;
+    padding: 1rem;
+  }
+  .card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(67, 97, 238, 0.13);
   }
 
-  .dashboard-form-section h4 {
-    color: #4361ee;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    border-left: 5px solid #ffd166;
-    padding-left: 12px;
+  /* Table Styles */
+  .table {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 0;
+    box-shadow: 0 2px 12px rgba(67, 97, 238, 0.04);
+  }
+  .table th {
+    background: linear-gradient(90deg, #4361ee 80%, #ffd166 100%);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    font-size: 1rem;
+  }
+  .table td {
+    vertical-align: middle;
+    font-size: 0.98rem;
+    color: #2d3748;
+    border-top: 1px solid #f1f5ff;
+  }
+  .table-hover tbody tr:hover {
+    background: #f1f5ff;
   }
 
-  .form-label {
+  /* Badges */
+  .badge {
+    padding: 6px 14px;
+    font-size: 0.92rem;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .bg-success {
+    background: #06d6a0;
+    color: #fff;
+  }
+  .bg-danger {
+    background: #ff6b6b;
+    color: #fff;
+  }
+  .bg-primary {
+    background: #4361ee;
+    color: #fff;
+  }
+  .bg-secondary {
+    background: #718096;
+    color: #fff;
+  }
+  .bg-warning {
+    background: #ffd166;
+    color: #fff;
+  }
+
+  /* Forms */
+  .dashboard-form-section .form-label {
     font-weight: 600;
     color: #2d3748;
   }
-
-  .form-control,
-  .form-select {
+  .dashboard-form-section .form-control,
+  .dashboard-form-section .form-select {
     border-radius: 8px;
     border: 1px solid #e2e8f0;
   }
-
   .dashboard-form-section .btn {
     font-weight: 700;
     border-radius: 8px;
     padding: 0.6rem 1.5rem;
   }
 
-  /* Responsive Adjustments */
-  @media (max-width: 991px) {
-    .row.mb-4 > .col-md-2 {
-      flex: 0 0 50%;
-      max-width: 50%;
-    }
-
-    .card .display-6 {
-      font-size: 1.3rem;
-    }
-
-    .table-responsive {
-      font-size: 0.95rem;
-    }
+  /* Action Buttons */
+  .action-btns {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  .btn-edit {
+    background: #4361ee;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.95rem;
+    transition: 0.2s;
+  }
+  .btn-edit:hover {
+    background: #3a56d4;
+    color: #fff;
+  }
+  .btn-delete {
+    background: #ff6b6b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.95rem;
+    transition: 0.2s;
+  }
+  .btn-delete:hover {
+    background: #e63946;
+    color: #fff;
   }
 
+  /* Responsive */
+  @media (max-width: 991px) {
+    .dashboard-form-section .col-md-4 {
+      flex: 0 0 50%;
+      max-width: 50%;
+      margin-bottom: 1.5rem;
+    }
+  }
   @media (max-width: 768px) {
-    .row.mb-4 > .col-md-2 {
+    .dashboard-form-section .col-md-4 {
       flex: 0 0 100%;
       max-width: 100%;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
     }
-
-    .table-responsive {
-      font-size: 0.92rem;
-    }
-
     h2 {
       font-size: 2rem;
     }
-
     h4 {
       font-size: 1.2rem;
     }
-  }
-
-  /* Misc */
-  ::-webkit-scrollbar {
-    width: 8px;
-    background: #f1f5ff;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
-    border-radius: 8px;
   }
 </style>
 
@@ -236,25 +178,27 @@
       <div class="info-card">
         <h3>Welcome, Admin!</h3>
         <p>
-          Total Customers: <b>{{ customers|length }}</b> | Products:
-          <b>{{ products|length }}</b> | Feature Products:
-          <b>{% if feature_products %}{{ feature_products|length }}{% else %}0{% endif %}</b>| Orders: <b>{{ orders|length }}</b> | Payments:
-          <b>{{ payments|length }}</b> | Categories:
-          <b>{{ categories|length }}</b> | Carts: <b>{{ carts|length }}</b>
+          Total Customers: <b>{{ customers|length|default:"0" }}</b> | Products:
+          <b>{{ products|length|default:"0" }}</b> | Feature Products:
+          <b>{{ feature_products|length|default:"0" }}</b> | Orders:
+          <b>{{ orders|length|default:"0" }}</b> | Payments:
+          <b>{{ payments|length|default:"0" }}</b> | Categories:
+          <b>{{ categories|length|default:"0" }}</b> | Carts:
+          <b>{{ carts|length|default:"0" }}</b>
         </p>
       </div>
     </div>
   </div>
 
-  <!-- Add Category/Product Forms -->
+  <!-- Dashboard Forms -->
   <div class="row dashboard-form-section">
-    <div class="col-md-6">
+    <!-- Add Category -->
+    <div class="col-md-4">
       <h4>Add New Category</h4>
       <form
         method="post"
         action="{% url 'admin_dashboard' %}"
         enctype="multipart/form-data"
-        class="mb-4"
       >
         {% csrf_token %}
         <div class="mb-3">
@@ -283,13 +227,14 @@
         </button>
       </form>
     </div>
-    <div class="col-md-6">
+
+    <!-- Add Product -->
+    <div class="col-md-4">
       <h4>Add New Product</h4>
       <form
         method="post"
         action="{% url 'admin_dashboard' %}"
         enctype="multipart/form-data"
-        class="mb-4"
       >
         {% csrf_token %}
         <div class="mb-3">
@@ -366,10 +311,112 @@
         </button>
       </form>
     </div>
+
+    <!-- Add Feature Product -->
+    <div class="col-md-4">
+      <h4>Add Feature Product</h4>
+      <form
+        method="post"
+        action="{% url 'admin_dashboard' %}"
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="feature_name" class="form-label"
+            >Feature Product Name</label
+          >
+          <input
+            type="text"
+            name="feature_name"
+            id="feature_name"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="feature_category" class="form-label">Category</label>
+          <select
+            name="feature_category"
+            id="feature_category"
+            class="form-select"
+            required
+          >
+            <option value="" disabled selected>Select Category</option>
+            {% for category in categories %}
+            <option value="{{ category.category_id }}">
+              {{ category.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="feature_price" class="form-label">Price</label>
+          <input
+            type="number"
+            name="feature_price"
+            id="feature_price"
+            class="form-control"
+            step="0.01"
+            min="0"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="feature_discount" class="form-label">Discount</label>
+          <input
+            type="number"
+            name="feature_discount"
+            id="feature_discount"
+            class="form-control"
+            step="0.01"
+            min="0"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="feature_stock" class="form-label">Stock</label>
+          <input
+            type="number"
+            name="feature_stock"
+            id="feature_stock"
+            class="form-control"
+            min="0"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="feature_image" class="form-label">Image</label>
+          <input
+            type="file"
+            name="feature_image"
+            id="feature_image"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="feature_description" class="form-label"
+            >Description</label
+          >
+          <textarea
+            name="feature_description"
+            id="feature_description"
+            class="form-control"
+            rows="2"
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          name="add_feature_product"
+          class="btn btn-warning w-100"
+        >
+          Add Feature Product
+        </button>
+      </form>
+    </div>
   </div>
 
   <!-- Data Tables Section -->
-  <h4 class="mb-3">All Customers</h4>
+  {% comment %} Customers Table {% endcomment %}
+  <h4>All Customers</h4>
   <div class="table-responsive mb-5">
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-light">
@@ -407,7 +454,11 @@
     </table>
   </div>
 
-  <h4 class="mb-3">All Products</h4>
+  {% comment %} Repeat similar structure for Products, Feature Products, Orders,
+  Payments, Categories, Carts {% endcomment %}
+
+  <!-- Products Table -->
+  <h4>All Products</h4>
   <div class="table-responsive mb-5">
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-light">
@@ -418,6 +469,7 @@
           <th>Price</th>
           <th>Stock</th>
           <th>Available</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -435,17 +487,42 @@
             <span class="badge bg-danger">No</span>
             {% endif %}
           </td>
+          <td>
+            <div class="action-btns">
+              <a
+                href="{% url 'admin_edit_product' product.product_id %}"
+                class="btn btn-edit btn-sm"
+              >
+                <i class="fas fa-edit"></i> Edit
+              </a>
+              <form
+                method="post"
+                action="{% url 'admin_delete_product' product.product_id %}"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="btn btn-delete btn-sm"
+                  onclick="return confirm('Are you sure you want to delete this product?');"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </form>
+            </div>
+          </td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="6" class="text-center">No products found.</td>
+          <td colspan="7" class="text-center">No products found.</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
-  <h4 class="mb-3">All Feature Products</h4>
+  <!-- Feature Products Table -->
+  <h4>All Feature Products</h4>
   <div class="table-responsive mb-5">
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-light">
@@ -457,10 +534,11 @@
           <th>Discount</th>
           <th>Stock</th>
           <th>Available</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {% if feature_products %} {% for product in feature_products %}
+        {% for product in feature_products %}
         <tr>
           <td>{{ product.Feature_Product_id }}</td>
           <td>{{ product.name }}</td>
@@ -481,142 +559,39 @@
             <span class="badge bg-danger">No</span>
             {% endif %}
           </td>
-        </tr>
-        {% endfor %} {% else %}
-        <tr>
-          <td colspan="7" class="text-center">No feature products found.</td>
-        </tr>
-        {% endif %}
-      </tbody>
-    </table>
-  </div>
-
-  <h4 class="mb-3">All Orders</h4>
-  <div class="table-responsive mb-5">
-    <table class="table table-bordered table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Order ID</th>
-          <th>Customer</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Payment Status</th>
-          <th>Created At</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for order in orders %}
-        <tr>
-          <td>{{ order.order_id }}</td>
-          <td>{{ order.customer.name }}</td>
-          <td>${{ order.amount|floatformat:2 }}</td>
-          <td>{{ order.status }}</td>
-          <td>{{ order.payment_status }}</td>
-          <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6" class="text-center">No orders found.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <h4 class="mb-3">All Payments</h4>
-  <div class="table-responsive mb-5">
-    <table class="table table-bordered table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Payment ID</th>
-          <th>Reference</th>
-          <th>Amount</th>
-          <th>Method</th>
-          <th>Status</th>
-          <th>Customer</th>
-          <th>Order</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for payment in payments %}
-        <tr>
-          <td>{{ payment.payment_id }}</td>
-          <td>{{ payment.payment_reference }}</td>
-          <td>${{ payment.amount|floatformat:2 }}</td>
-          <td>{{ payment.payment_method }}</td>
-          <td>{{ payment.status }}</td>
-          <td>{{ payment.customer.name }}</td>
-          <td>{{ payment.order.order_id }}</td>
-          <td>{{ payment.payment_date|date:"Y-m-d H:i" }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="8" class="text-center">No payments found.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <h4 class="mb-3">All Categories</h4>
-  <div class="table-responsive mb-5">
-    <table class="table table-bordered table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Category ID</th>
-          <th>Name</th>
-          <th>Visible</th>
-          <th>Created At</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for category in categories %}
-        <tr>
-          <td>{{ category.category_id }}</td>
-          <td>{{ category.name }}</td>
           <td>
-            {% if category.is_visible %}
-            <span class="badge bg-success">Yes</span>
-            {% else %}
-            <span class="badge bg-danger">No</span>
-            {% endif %}
+            <div class="action-btns">
+              <a
+                href="{% url 'admin_edit_feature_product' product.Feature_Product_id %}"
+                class="btn btn-edit btn-sm"
+              >
+                <i class="fas fa-edit"></i> Edit
+              </a>
+              <form
+                method="post"
+                action="{% url 'admin_delete_feature_product' product.Feature_Product_id %}"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="btn btn-delete btn-sm"
+                  onclick="return confirm('Are you sure you want to delete this feature product?');"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </form>
+            </div>
           </td>
-          <td>{{ category.created_at|date:"Y-m-d" }}</td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="4" class="text-center">No categories found.</td>
+          <td colspan="8" class="text-center">No feature products found.</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-
-  <h4 class="mb-3">All Carts</h4>
-  <div class="table-responsive mb-5">
-    <table class="table table-bordered table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Cart ID</th>
-          <th>Customer</th>
-          <th>Updated At</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for cart in carts %}
-        <tr>
-          <td>{{ cart.cart_id }}</td>
-          <td>{{ cart.customer.name }}</td>
-          <td>{{ cart.updated_at|date:"Y-m-d H:i" }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="3" class="text-center">No carts found.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  <!-- ...existing code... -->
 </div>
 {% endblock %}

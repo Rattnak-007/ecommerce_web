@@ -222,8 +222,8 @@ class AdminDashboardView(LoginRequiredMixin, TemplateView):
         payment_status_counts = defaultdict(int)
         for p in payments:
             payment_status_counts[p.status] += 1
-        # Products per category
-        products_per_category = {cat.name: cat.product_set.count() for cat in categories}
+        # Products per category (fix: use related_name 'products' instead of 'product_set')
+        products_per_category = {cat.name: cat.products.count() for cat in categories}
         context.update({
             'customers': customers,
             'products': products,

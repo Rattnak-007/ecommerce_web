@@ -1,33 +1,187 @@
-{% extends 'ecommerce/base.html' %}
-{% block title %}{{ category.name }}{% endblock %}
-{% block content %}
-<h2 class="mb-4 text-center">{{ category.name }}</h2>
-<h4 class="mb-3 text-center">Products in this category</h4>
-<div class="row">
-    {% for product in category.product_set.all %}
+{% extends 'ecommerce/base.html' %} {% block title %} {{ category.name }} {% endblock %} {% block content %}
+<style>
+  /* Page titles */
+  h2 {
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  h4 {
+    font-weight: 500;
+    color: #555;
+  }
+
+  /* Product card styling */
+  .product-card {
+    border: none;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Product image container */
+  .product-image {
+    background: #f8f9fa;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 180px;
+  }
+
+  .product-image img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-image img {
+    transform: scale(1.05);
+  }
+
+  /* Product title */
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #34495e;
+  }
+
+  /* Product description */
+  .card-text {
+    font-size: 14px;
+    color: #7f8c8d;
+    min-height: 40px;
+  }
+
+  /* Price styling */
+  .price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #007bff;
+  }
+
+  /* Add to cart button */
+  .btn-add-cart {
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    transition: 0.2s ease;
+  }
+  .btn-add-cart:hover {
+    background-color: #218838 !important;
+    border-color: #218838 !important;
+  }
+
+  /* Empty category message */
+  .no-products {
+    color: #7f8c8d;
+    font-size: 15px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+  }
+</style>
+
+<div class="container py-5">
+  <h2 class="mb-3 text-center">{{ category.name }}</h2>
+  {% if request.GET.type == "feature" %}
+  <h4 class="mb-4 text-center">Feature Products in this category</h4>
+  <div class="row">
+    {% for feature in feature_products %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-        <div class="card h-100 shadow-sm">
-            <div class="text-center" style="background:#f8f9fa;">
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" class="card-img-top mx-auto d-block" alt="{{ product.name }}" style="width:120px; height:120px; object-fit:cover; margin-top:16px;">
-                {% else %}
-                    <img src="https://via.placeholder.com/120?text=No+Image" class="card-img-top mx-auto d-block" alt="No image" style="width:120px; height:120px; object-fit:cover; margin-top:16px;">
-                {% endif %}
-            </div>
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title text-center">{{ product.name }}</h5>
-                <p class="card-text small text-muted text-center">{{ product.description|truncatechars:60 }}</p>
-                <div class="mt-auto d-flex justify-content-between align-items-center">
-                    <span class="fw-bold text-primary">${{ product.price }}</span>
-                    <a href="{% url 'add_to_cart' product.product_id %}" class="btn btn-sm btn-success">Add to Cart</a>
-                </div>
-            </div>
+      <div class="card product-card h-100 shadow-sm border-warning">
+        <div class="product-image">
+          {% if feature.image %}
+          <img src="{{ feature.image.url }}" alt="{{ feature.name }}" />
+          {% else %}
+          <img
+            src="https://via.placeholder.com/140?text=No+Image"
+            alt="No image"
+          />
+          {% endif %}
         </div>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-center">{{ feature.name }}</h5>
+          <p class="card-text text-center">
+            {{ feature.description|truncatechars:60 }}
+          </p>
+          <div
+            class="mt-auto d-flex justify-content-between align-items-center"
+          >
+            {% if feature.discount and feature.discount > 0 %}
+            <span class="price text-danger"
+              >${{ feature.discount|floatformat:2 }}</span
+            >
+            <span class="text-muted text-decoration-line-through"
+              >${{ feature.price|floatformat:2 }}</span
+            >
+            {% else %}
+            <span class="price">${{ feature.price|floatformat:2 }}</span>
+            {% endif %}
+            <a
+              href="{% url 'add_to_cart' feature.Feature_Product_id %}"
+              class="btn btn-warning btn-sm btn-add-cart"
+            >
+              Add to Cart
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
     {% empty %}
-    <div class="col-12">
-        <p class="text-center">No products in this category.</p>
+    <div class="col-12 text-center">
+      <p class="no-products">No feature products in this category.</p>
     </div>
     {% endfor %}
+  </div>
+  {% else %}
+  <h4 class="mb-4 text-center">Products in this category</h4>
+  <div class="row">
+    {% for product in products %}
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+      <div class="card product-card h-100 shadow-sm">
+        <div class="product-image">
+          {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+          {% else %}
+          <img
+            src="https://via.placeholder.com/140?text=No+Image"
+            alt="No image"
+          />
+          {% endif %}
+        </div>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-center">{{ product.name }}</h5>
+          <p class="card-text text-center">
+            {{ product.description|truncatechars:60 }}
+          </p>
+          <div
+            class="mt-auto d-flex justify-content-between align-items-center"
+          >
+            <span class="price">${{ product.price }}</span>
+            <a
+              href="{% url 'add_to_cart' product.product_id %}"
+              class="btn btn-success btn-sm btn-add-cart"
+            >
+              Add to Cart
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+      <p class="no-products">No products in this category.</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

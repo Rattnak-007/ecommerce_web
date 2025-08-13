@@ -1,34 +1,101 @@
-{% extends 'ecommerce/base.html' %}
-{% block title %}My Orders{% endblock %}
-{% block content %}
-<h2 class="mb-4 text-center">My Orders</h2>
-<div class="row justify-content-center">
+{% extends 'ecommerce/base.html' %} {% block title %}My Orders{% endblock %} {% block content %}
+<style>
+  /* Page title */
+  h2 {
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  /* Order card style */
+  .order-card {
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 40px;
+    transition: all 0.2s ease-in-out;
+    background: #fff;
+  }
+
+  .order-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    transform: translateY(-2px);
+  }
+
+  /* Order header */
+  .order-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: #34495e;
+  }
+
+  /* Date text */
+  .order-date {
+    font-size: 13px;
+    color: #7f8c8d;
+  }
+
+  /* Product list inside order */
+  .product-list {
+    margin-top: 8px;
+    padding-left: 20px;
+  }
+
+  .product-list li {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* Button style */
+  .btn-view {
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 14px;
+  }
+
+  /* Empty orders message */
+  .no-orders {
+    color: #7f8c8d;
+    font-size: 15px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="container py-5">
+  <h2 class="mb-4 text-center">My Orders</h2>
+  <div class="row justify-content-center">
     <div class="col-lg-8">
-        {% if orders %}
-            <ul class="list-group">
-                {% for order in orders %}
-                <li class="list-group-item mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Order #{{ order.order_id }}</strong>
-                            <span class="text-muted small ms-2">{{ order.created_at|date:"Y-m-d H:i" }}</span>
-                        </div>
-                        <a href="{% url 'order_detail' order.order_id %}" class="btn btn-sm btn-outline-primary">View Details</a>
-                    </div>
-                    <ul class="mt-2 mb-1">
-                        {% for product in order.products.all %}
-                        <li>
-                            {{ product.name }}
-                            <!-- If you have quantity info, show it here -->
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-center">No orders found.</p>
-        {% endif %}
+      {% if orders %}
+      <div class="d-flex flex-column gap-3">
+        {% for order in orders %}
+        <div class="order-card">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="order-header">Order #{{ order.order_id }}</span>
+              <span class="order-date ms-2"
+                >{{ order.created_at|date:"Y-m-d H:i" }}</span
+              >
+            </div>
+            <a
+              href="{% url 'order_detail' order.order_id %}"
+              class="btn btn-outline-primary btn-view"
+            >
+              View Details
+            </a>
+          </div>
+          <ul class="product-list">
+            {% for product in order.products.all %}
+            <li>{{ product.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-center no-orders">No orders found.</p>
+      {% endif %}
     </div>
+  </div>
 </div>
 {% endblock %}

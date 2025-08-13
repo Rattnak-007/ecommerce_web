@@ -5,7 +5,7 @@ from .views import (
     RegisterView, LoginView, ProductListView, CartView, HomeView,
     LoginPageView, RegisterPageView, AdminDashboardView, logout_view, CategoryListView, CategoryDetailView,
     add_to_cart, OrderDetailView, CheckoutView, update_cart, remove_from_cart, book_cart, process_payment,
-    OrderListView
+    OrderListView, FeatureProductViewSet
 )
 from . import views
 
@@ -16,6 +16,7 @@ router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('payments', PaymentViewSet)
 router.register('carts', CartViewSet)
+router.register('feature-products', FeatureProductViewSet)
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),  # Index page at /
@@ -33,7 +34,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),  # <-- added logout path
 
     path('categories/', CategoryListView.as_view(), name='categories'),
-    path('categories/<int:category_id>/', CategoryDetailView.as_view(), name='category_detail'),
+    path('categories/<int:category_id>/', CategoryDetailView.as_view(), name='categories_detail'),
 
     path('add-to-cart/<int:product_id>/', add_to_cart, name='add_to_cart'),
 
@@ -49,4 +50,7 @@ urlpatterns = [
     path('checkout/process/', process_payment, name='process_payment'),
 
     path('orders/', OrderListView.as_view(), name='orders'),
+
+    path('admin-dashboard/', AdminDashboardView.as_view(), name='admin_dashboard'),
 ]
+

@@ -1,6 +1,4 @@
 from django.db import models
-
-
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 
@@ -49,6 +47,14 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def products_count(self):
+        return self.products.count()
+
+    @property
+    def feature_products_count(self):
+        return self.feature_products.count()
+
 
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
@@ -66,12 +72,36 @@ class Product(models.Model):
         Category,
         to_field='category_id',
         on_delete=models.CASCADE,
-        db_column='category_id'
+        db_column='category_id',
+        related_name='products'
     )
 
     def __str__(self):
         return self.name
 
+class Feature_Product(models.Model):
+    Feature_Product_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    discount = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
+    stock = models.IntegerField(default=0)
+    is_available = models.BooleanField(default=True)
+    rating = models.FloatField(default=0)
+    available_from = models.DateField(null=True, blank=True)
+    available_to = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(
+        Category,
+        to_field='category_id',
+        on_delete=models.CASCADE,
+        db_column='category_id',
+        related_name='feature_products'
+    )
+
+    def __str__(self):
+        return self.name
 
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)

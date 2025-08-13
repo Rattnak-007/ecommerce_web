@@ -1,4 +1,6 @@
-{% extends 'ecommerce/base.html' %} {% block title %} Welcome to ShopEasy {% endblock %} {% block hero %} {% include 'ecommerce/slide-show.html' %} {% endblock %} {% block content %}
+{% extends 'ecommerce/base.html' %} {% block title %} Welcome to ShopEasy {% endblock %}
+ {% block hero %} 
+ {% include 'ecommerce/slide-show.html' %} {% endblock %} {% block content %}
 <style>
   :root {
     --primary: #4361ee;
@@ -544,97 +546,50 @@
       <h2>Featured Products</h2>
       <p>Discover our most popular items this season</p>
     </div>
-
     <div class="products-grid">
+      {% for product in featured_products %}
       <div class="product-card">
         <div class="product-image">
+          {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+          {% else %}
           <img
-            src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            alt="Smart Watch"
+            src="https://via.placeholder.com/300x200?text=No+Image"
+            alt="No image"
           />
+          {% endif %}
         </div>
+        {% if product.discount and product.discount > 0 %}
         <span class="product-badge">Sale</span>
+        {% endif %}
         <div class="product-body">
-          <span class="product-category">Electronics</span>
-          <h3 class="product-title">Smart Watch Series 5</h3>
-          <p>
-            Premium smartwatch with health monitoring and long battery life.
-          </p>
+          <span class="product-category">{{ product.category.name }}</span>
+          <h3 class="product-title">{{ product.name }}</h3>
+          <p>{{ product.description|truncatechars:60 }}</p>
           <div class="product-price">
             <div class="price">
-              <span class="old-price">$299</span>
-              $249
+              {% if product.discount and product.discount > 0 %}
+              <span class="old-price">${{ product.price|floatformat:2 }}</span>
+              ${{ product.discount|floatformat:2 }} {% else %} ${{
+              product.price|floatformat:2 }} {% endif %}
             </div>
-            <button class="add-to-cart">
-              <i class="fas fa-shopping-cart"></i>
-            </button>
+            <form
+              method="post"
+              action="{% url 'add_to_cart' product.Feature_Product_id %}"
+            >
+              {% csrf_token %}
+              <button class="add-to-cart" title="Add to Cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </form>
           </div>
         </div>
       </div>
-
-      <div class="product-card">
-        <div class="product-image">
-          <img
-            src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            alt="Wireless Headphones"
-          />
-        </div>
-        <div class="product-body">
-          <span class="product-category">Audio</span>
-          <h3 class="product-title">Wireless Noise-Cancelling Headphones</h3>
-          <p>Immersive sound experience with 30-hour battery life.</p>
-          <div class="product-price">
-            <div class="price">$179</div>
-            <button class="add-to-cart">
-              <i class="fas fa-shopping-cart"></i>
-            </button>
-          </div>
-        </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center">No featured products available.</p>
       </div>
-
-      <div class="product-card">
-        <div class="product-image">
-          <img
-            src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            alt="Camera"
-          />
-        </div>
-        <span class="product-badge">New</span>
-        <div class="product-body">
-          <span class="product-category">Photography</span>
-          <h3 class="product-title">DSLR Camera Pro</h3>
-          <p>Professional camera with 4K video and 24.2MP sensor.</p>
-          <div class="product-price">
-            <div class="price">$899</div>
-            <button class="add-to-cart">
-              <i class="fas fa-shopping-cart"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-image">
-          <img
-            src="https://images.unsplash.com/photo-1590947132387-155cc02f3212?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-            alt="Sneakers"
-          />
-        </div>
-        <div class="product-body">
-          <span class="product-category">Footwear</span>
-          <h3 class="product-title">Premium Running Shoes</h3>
-          <p>Lightweight and comfortable shoes for everyday running.</p>
-          <div class="product-price">
-            <div class="price">
-              <span class="old-price">$129</span>
-              $99
-            </div>
-            <button class="add-to-cart">
-              <i class="fas fa-shopping-cart"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>

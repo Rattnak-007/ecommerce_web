@@ -1,6 +1,9 @@
 from rest_framework import viewsets
-from .models import Customer, Category, Product, Order, Payment, Cart, CartItem
-from .serializers import CustomerSerializer, CategorySerializer, ProductSerializer, OrderSerializer, PaymentSerializer, CartSerializer
+from .models import Customer, Category, Product, Order, Payment, Cart, CartItem, Feature_Product
+from .serializers import (
+    CustomerSerializer, CategorySerializer, ProductSerializer, OrderSerializer,
+    PaymentSerializer, CartSerializer, FeatureProductSerializer
+)
 from django.views.generic import ListView, FormView, TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -21,6 +24,8 @@ from django.contrib import messages
 from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+from collections import defaultdict
+from django.core.files.storage import default_storage
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
@@ -46,6 +51,10 @@ class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
+class FeatureProductViewSet(viewsets.ModelViewSet):
+    queryset = Feature_Product.objects.all()
+    serializer_class = FeatureProductSerializer
+
 class ProductListView(ListView):
     model = Product
     template_name = 'ecommerce/products.html'
@@ -64,12 +73,14 @@ class RegisterPageView(TemplateView):
         from .models import Customer
         if Customer.objects.filter(name=name).exists():
             return render(request, self.template_name, {'error': 'Username already exists'})
+        # Always create non-staff user
         customer = Customer.objects.create_user(
             name=name,
             email=email,
             password=password,
             phone=phone,
-            address=address
+            address=address,
+            is_staff=False
         )
         login(request, customer)
         return redirect('products')  # Go to shopping/products page after register
@@ -136,17 +147,95 @@ class HomeView(TemplateView):
     template_name = 'ecommerce/index.html'
 
     def dispatch(self, request, *args, **kwargs):
-        # Remove redirect to 'admin_dashboard'
+        # Redirect staff users to admin dashboard
+        if request.user.is_authenticated and request.user.is_staff:
+            return redirect('admin_dashboard')
         return super().dispatch(request, *args, **kwargs)
 
-class AdminDashboardView(TemplateView):
-    template_name = 'ecommerce/admin.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['customers_count'] = Customer.objects.count()
-        context['products_count'] = Product.objects.count()
-        context['orders_count'] = Order.objects.count()
-        context['payments_count'] = Payment.objects.count()
+        from .models import Product, Category
+        featured_products = Feature_Product.objects.filter(is_available=True).order_by('-created_at')[:8]
+        categories = Category.objects.filter(is_visible=True)
+        context['featured_products'] = featured_products
+        context['featured_categories'] = categories
+        return context
+
+class AdminDashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'ecommerce/admin-dashboard/dashboard.html'
+    login_url = 'login'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        from .models import Category, Product
+        # Add Category
+        if 'add_category' in request.POST:
+            name = request.POST.get('category_name')
+            is_visible = request.POST.get('category_visible') == 'true'
+            if name and not Category.objects.filter(name=name).exists():
+                Category.objects.create(name=name, is_visible=is_visible)
+                
+        if 'add_product' in request.POST:
+            name = request.POST.get('product_name')
+            category_id = request.POST.get('product_category')
+            price = request.POST.get('product_price')
+            stock = request.POST.get('product_stock')
+            description = request.POST.get('product_description')
+            image = request.FILES.get('product_image')
+            if name and category_id and price and stock:
+                try:
+                    category = Category.objects.get(pk=category_id)
+                    product = Product(
+                        name=name,
+                        category=category,
+                        price=price,
+                        stock=stock,
+                        description=description or "",
+                        is_available=True,
+                    )
+                    if image:
+                        product.image = image
+                    product.save()
+                except Category.DoesNotExist:
+                    pass
+        return redirect('admin_dashboard')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from .models import Feature_Product
+        customers = Customer.objects.all()
+        products = Product.objects.all()
+        feature_products = Feature_Product.objects.all()
+        orders = Order.objects.all()
+        payments = Payment.objects.all()
+        categories = Category.objects.all()
+        carts = Cart.objects.all()
+        # Group orders by status
+        order_status_counts = defaultdict(int)
+        for o in orders:
+            order_status_counts[o.status] += 1
+        # Group payments by status
+        payment_status_counts = defaultdict(int)
+        for p in payments:
+            payment_status_counts[p.status] += 1
+        # Products per category
+        products_per_category = {cat.name: cat.product_set.count() for cat in categories}
+        context.update({
+            'customers': customers,
+            'products': products,
+            'feature_products': feature_products,
+            'orders': orders,
+            'payments': payments,
+            'categories': categories,
+            'carts': carts,
+            'order_status_counts': dict(order_status_counts),
+            'payment_status_counts': dict(payment_status_counts),
+            'products_per_category': products_per_category,
+        })
         return context
 
 class OrderListView(LoginRequiredMixin, ListView):
@@ -172,6 +261,13 @@ class CategoryDetailView(DetailView):
     template_name = 'ecommerce/category_detail.html'
     context_object_name = 'category'
     pk_url_kwarg = 'category_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = self.object
+        context['products'] = category.products.all()
+        context['feature_products'] = category.feature_products.all()
+        return context
 
 class OrderDetailView(DetailView):
     model = Order
@@ -236,23 +332,29 @@ def book_cart(request):
     from .models import Cart, CartItem, Order
     cart = Cart.objects.get(customer=request.user)
     cart_items = CartItem.objects.filter(cart=cart)
-    if cart_items:
-        order = Order.objects.create(
-            customer=request.user,
-            booking_reference=get_random_string(12),
-            amount=sum(item.product.price * item.quantity for item in cart_items),
-            status='pending',
-            payment_status='unpaid',
-            start_date=None,  # Set as needed
-            end_date=None     # Set as needed
-        )
-        for item in cart_items:
-            order.products.add(item.product)
-        cart_items.delete()  # Clear cart after booking
-        messages.success(request, "Booking successful! Your order has been placed.")
+    # Only allow booking if cart has items and user has not already booked/unpaid
+    if not cart_items:
+        messages.error(request, "Your cart is empty.")
+        return redirect('cart')
+    # Prevent booking if there is an unpaid order for this user
+    unpaid_order_exists = Order.objects.filter(customer=request.user, payment_status='unpaid').exists()
+    if unpaid_order_exists:
+        messages.error(request, "You have an unpaid order. Please complete payment before booking another cart.")
         return redirect('orders')
-    messages.error(request, "Your cart is empty.")
-    return redirect('cart')
+    order = Order.objects.create(
+        customer=request.user,
+        booking_reference=get_random_string(12),
+        amount=sum(item.product.price * item.quantity for item in cart_items),
+        status='pending',
+        payment_status='unpaid',
+        start_date=None,  # Set as needed
+        end_date=None     # Set as needed
+    )
+    for item in cart_items:
+        order.products.add(item.product)
+    cart_items.delete()  # Clear cart after booking
+    messages.success(request, "Booking successful! Your order has been placed.")
+    return redirect('orders')
 
 def generate_unique_booking_reference():
     from .models import Order
@@ -294,5 +396,4 @@ def process_payment(request):
         cart_items.delete()
         messages.success(request, "Payment successful! Thank you for your order.")
         return redirect('orders')
-    return redirect('checkout')
     return redirect('checkout')

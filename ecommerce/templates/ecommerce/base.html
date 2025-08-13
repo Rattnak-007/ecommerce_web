@@ -362,6 +362,7 @@
                 Home
               </a>
             </li>
+            {% if not request.user.is_authenticated or not request.user.is_staff %}
             <li class="nav-item">
               <a
                 class="nav-link{% if request.resolver_match.url_name == 'products' %} active{% endif %}"
@@ -370,9 +371,12 @@
                 Products
               </a>
             </li>
+            {% endif %}
+            {% if request.user.is_authenticated and request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'categories' %}"> Categories </a>
             </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'orders' %}"> My Orders </a>
             </li>

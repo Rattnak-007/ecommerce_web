@@ -92,7 +92,7 @@
 <div class="container py-5">
   <h2 class="mb-3 text-center">{{ category.name }}</h2>
   {% if request.GET.type == "feature" %}
-  <h4 class="mb-4 text-center">Feature Products in this category</h4>
+  <h4 class="mb-4 text-center"></h4>
   <div class="row">
     {% for feature in feature_products %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -125,12 +125,6 @@
             {% else %}
             <span class="price">${{ feature.price|floatformat:2 }}</span>
             {% endif %}
-            <a
-              href="{% url 'add_to_cart' feature.Feature_Product_id %}"
-              class="btn btn-warning btn-sm btn-add-cart"
-            >
-              Add to Cart
-            </a>
           </div>
         </div>
       </div>
@@ -142,7 +136,7 @@
     {% endfor %}
   </div>
   {% else %}
-  <h4 class="mb-4 text-center">Products in this category</h4>
+  <h4 class="mb-4 text-center"></h4>
   <div class="row">
     {% for product in products %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -166,12 +160,6 @@
             class="mt-auto d-flex justify-content-between align-items-center"
           >
             <span class="price">${{ product.price }}</span>
-            <a
-              href="{% url 'add_to_cart' product.product_id %}"
-              class="btn btn-success btn-sm btn-add-cart"
-            >
-              Add to Cart
-            </a>
           </div>
         </div>
       </div>

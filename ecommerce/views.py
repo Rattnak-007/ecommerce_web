@@ -64,6 +64,37 @@ class ProductListView(ListView):
     template_name = 'ecommerce/products.html'
     context_object_name = 'products'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from .models import Category, Feature_Product
+        categories = Category.objects.filter(is_visible=True)
+        category_id = self.request.GET.get('category')
+        type_param = self.request.GET.get('type')
+        if category_id:
+            try:
+                category = Category.objects.get(pk=category_id)
+            except Category.DoesNotExist:
+                category = None
+        else:
+            category = None
+
+        if type_param == 'feature':
+            if category:
+                feature_products = category.feature_products.all()
+            else:
+                feature_products = Feature_Product.objects.all()
+            context['feature_products'] = feature_products
+            context['products'] = []
+        else:
+            if category:
+                products = category.products.all()
+            else:
+                products = Product.objects.all()
+            context['products'] = products
+            context['feature_products'] = []
+        context['categories'] = categories
+        return context
+
 class RegisterPageView(TemplateView):
     template_name = 'ecommerce/register.html'
 
@@ -320,8 +351,13 @@ class CategoryDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = self.object
-        context['products'] = category.products.all()
-        context['feature_products'] = category.feature_products.all()
+        type_param = self.request.GET.get('type', 'products')
+        if type_param == 'feature':
+            context['feature_products'] = category.feature_products.all()
+            context['products'] = []
+        else:
+            context['products'] = category.products.all()
+            context['feature_products'] = []
         return context
 
 class OrderDetailView(DetailView):
@@ -336,17 +372,26 @@ def logout_view(request):
 
 @login_required(login_url='login')
 def add_to_cart(request, product_id):
-    from .models import Product, Cart, CartItem
-    product = get_object_or_404(Product, pk=product_id)
-    cart, created = Cart.objects.get_or_create(customer=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-        messages.success(request, f"Added another {product.name} to your cart.")
-    else:
-        messages.success(request, f"Added {product.name} to your cart.")
-    return redirect('cart')
+    from .models import Product, Feature_Product, Cart, CartItem
+    # Try to get Product first, if not found, try Feature_Product
+    product = Product.objects.filter(pk=product_id).first()
+    if product:
+        cart, created = Cart.objects.get_or_create(customer=request.user)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+            messages.success(request, f"Added another {product.name} to your cart.")
+        else:
+            messages.success(request, f"Added {product.name} to your cart.")
+        return redirect('cart')
+    # If not a Product, check Feature_Product
+    feature_product = Feature_Product.objects.filter(pk=product_id).first()
+    if feature_product:
+        messages.error(request, "Feature products cannot be added to cart directly. Please add the main product.")
+        return redirect('products')
+    messages.error(request, "Product not found.")
+    return redirect('products')
 
 class CheckoutView(LoginRequiredMixin, TemplateView):
     template_name = 'ecommerce/checkout.html'

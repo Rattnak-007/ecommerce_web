@@ -17,6 +17,14 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+      /* Page title */
+      * {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
       :root {
         --primary: #4361ee;
         --primary-dark: #3a56d4;
@@ -366,12 +374,10 @@
             <li class="nav-item">
               <a
                 class="nav-link{% if request.resolver_match.url_name == 'products' %} active{% endif %}"
-                href="{% url 'products' %}"
-              >
-                Products
+                href="{% url 'products' %}"> Products
               </a>
             </li>
-            {% endif %}
+            {% endif %} 
             {% if request.user.is_authenticated and request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'categories' %}"> Categories </a>
@@ -380,9 +386,11 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'orders' %}"> My Orders </a>
             </li>
+            {% if not request.user.is_authenticated or not request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'about' %}"> About </a>
             </li>
+            {% endif %} 
           </ul>
 
           <!-- Search Bar -->
@@ -392,9 +400,11 @@
           </div>
           <div class="nav-buttons d-flex ms-2">
             {% if request.user.is_authenticated %}
+            {% if not request.user.is_authenticated or not request.user.is_staff %}
             <a href="{% url 'cart' %}" class="btn-log btn-outline-light">
               <i class="fas fa-shopping-cart"></i>
             </a>
+            {% endif %} 
             <!-- User Dropdown -->
             <div class="dropdown ms-2">
               <a

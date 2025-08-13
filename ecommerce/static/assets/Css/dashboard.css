@@ -1,0 +1,282 @@
+/* Dashboard Background */
+body {
+    background: #f4f7fa;
+    font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container.py-5 {
+    max-width: 98vw;
+}
+
+/* Info Card */
+.info-card {
+    background: linear-gradient(90deg, #4361ee 80%, #ffd166 100%);
+    color: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(67, 97, 238, 0.13);
+    padding: 2.2rem 1.7rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+}
+
+.info-card h3 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+}
+
+.info-card p {
+    font-size: 1.15rem;
+    margin-bottom: 0;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Section Titles */
+h4 {
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+    color: #4361ee;
+    font-weight: 700;
+    border-left: 5px solid #ffd166;
+    padding-left: 12px;
+    letter-spacing: 0.5px;
+    font-size: 1.3rem;
+}
+
+/* Dashboard Form Section */
+.dashboard-form-section {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(67, 97, 238, 0.08);
+    padding: 2.2rem 1.5rem 1.2rem 1.5rem;
+    margin-bottom: 2.5rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.dashboard-form-section>.col-md-4 {
+    min-width: 320px;
+    flex: 1 1 320px;
+}
+
+.dashboard-form-section h4 {
+    color: #4361ee;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border-left: 5px solid #ffd166;
+    padding-left: 12px;
+    font-size: 1.1rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.form-control,
+.form-select {
+    border-radius: 8px;
+    border: 1.5px solid #e2e8f0;
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+}
+
+.dashboard-form-section .btn {
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+/* Table Styles */
+.table {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 0;
+    box-shadow: 0 2px 12px rgba(67, 97, 238, 0.04);
+    font-family: "Poppins", sans-serif;
+}
+
+.table th {
+    background: linear-gradient(90deg, #4361ee 80%, #ffd166 100%);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 0.98rem;
+    color: #2d3748;
+    border-top: 1px solid #f1f5ff;
+    text-align: center;
+}
+
+.table-hover tbody tr:hover {
+    background: #f1f5ff;
+    transition: background 0.2s;
+}
+
+.table-responsive {
+    border-radius: 12px;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+/* Badges */
+.badge {
+    padding: 6px 14px;
+    font-size: 0.92rem;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.bg-success {
+    background: #06d6a0 !important;
+    color: #fff !important;
+}
+
+.bg-danger {
+    background: #ff6b6b !important;
+    color: #fff !important;
+}
+
+.bg-primary {
+    background: #4361ee !important;
+    color: #fff !important;
+}
+
+.bg-secondary {
+    background: #718096 !important;
+    color: #fff !important;
+}
+
+.bg-warning {
+    background: #ffd166 !important;
+    color: #fff !important;
+}
+
+/* Action Buttons */
+.action-btns {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.btn-edit {
+    background: #4361ee;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.95rem;
+    transition: 0.2s;
+}
+
+.btn-edit:hover {
+    background: #3a56d4;
+    color: #fff;
+}
+
+.btn-delete {
+    background: #ff6b6b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.95rem;
+    transition: 0.2s;
+}
+
+.btn-delete:hover {
+    background: #e63946;
+    color: #fff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .dashboard-form-section {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .dashboard-form-section>.col-md-4 {
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 991px) {
+    .dashboard-form-section .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-card h3 {
+        font-size: 1.5rem;
+    }
+
+    .info-card p {
+        font-size: 1rem;
+    }
+
+    .table th,
+    .table td {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-form-section {
+        padding: 1.2rem 0.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    .info-card {
+        padding: 1.2rem 0.7rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-form-section {
+        padding: 0.7rem 0.2rem;
+    }
+
+    .info-card {
+        padding: 0.7rem 0.2rem;
+    }
+
+    .table th,
+    .table td {
+        font-size: 0.9rem;
+    }
+}
+
+/* Misc */
+::-webkit-scrollbar {
+    width: 8px;
+    background: #f1f5ff;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 8px;
+}

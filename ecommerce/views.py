@@ -560,4 +560,64 @@ def admin_delete_feature_product(request, feature_product_id):
         return redirect('admin_dashboard')
     return redirect('admin_dashboard')
 
+@staff_required
+def admin_edit_order(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    if request.method == 'POST':
+        order.status = request.POST.get('status', order.status)
+        order.amount = request.POST.get('amount', order.amount)
+        order.save()
+        messages.success(request, "Order updated successfully.")
+        return redirect('admin_dashboard')
+    return render(request, 'ecommerce/admin-dashboard/edit_order.html', {'order': order})
+
+@staff_required
+def admin_delete_order(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    if request.method == 'POST':
+        order.delete()
+        messages.success(request, "Order deleted successfully.")
+        return redirect('admin_dashboard')
+    return redirect('admin_dashboard')
+
+@staff_required
+def admin_edit_payment(request, payment_id):
+    payment = get_object_or_404(Payment, pk=payment_id)
+    if request.method == 'POST':
+        payment.status = request.POST.get('status', payment.status)
+        payment.amount = request.POST.get('amount', payment.amount)
+        payment.save()
+        messages.success(request, "Payment updated successfully.")
+        return redirect('admin_dashboard')
+    return render(request, 'ecommerce/admin-dashboard/edit_payment.html', {'payment': payment})
+
+@staff_required
+def admin_delete_payment(request, payment_id):
+    payment = get_object_or_404(Payment, pk=payment_id)
+    if request.method == 'POST':
+        payment.delete()
+        messages.success(request, "Payment deleted successfully.")
+        return redirect('admin_dashboard')
+    return redirect('admin_dashboard')
+
+@staff_required
+def admin_edit_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    if request.method == 'POST':
+        category.name = request.POST.get('name', category.name)
+        category.visible = request.POST.get('visible', 'false') == 'true'
+        category.save()
+        messages.success(request, "Category updated successfully.")
+        return redirect('admin_dashboard')
+    return render(request, 'ecommerce/admin-dashboard/edit_category.html', {'category': category})
+
+@staff_required
+def admin_delete_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    if request.method == 'POST':
+        category.delete()
+        messages.success(request, "Category deleted successfully.")
+        return redirect('admin_dashboard')
+    return redirect('admin_dashboard')
+
 about = AboutPageView.as_view()

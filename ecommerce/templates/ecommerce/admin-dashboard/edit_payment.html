@@ -1,0 +1,32 @@
+{% extends 'ecommerce/base.html' %}
+{% block title %}Edit Payment{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2>Edit Payment #{{ payment.payment_id }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">Customer</label>
+      <input type="text" class="form-control" value="{{ payment.customer.name }}" disabled>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Order Reference</label>
+      <input type="text" class="form-control" value="{{ payment.order.booking_reference }}" disabled>
+    </div>
+    <div class="mb-3">
+      <label for="amount" class="form-label">Amount</label>
+      <input type="number" name="amount" id="amount" class="form-control" value="{{ payment.amount }}" step="0.01" required>
+    </div>
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select name="status" id="status" class="form-select">
+        <option value="pending" {% if payment.status == "pending" %}selected{% endif %}>Pending</option>
+        <option value="completed" {% if payment.status == "completed" %}selected{% endif %}>Completed</option>
+        <option value="failed" {% if payment.status == "failed" %}selected{% endif %}>Failed</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

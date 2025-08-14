@@ -378,19 +378,32 @@
               </a>
             </li>
             {% endif %} 
-            {% if request.user.is_authenticated and request.user.is_staff %}
+            {% if not request.user.is_authenticated or not request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'categories' %}"> Categories </a>
             </li>
             {% endif %}
+            {% if not request.user.is_authenticated or not request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'orders' %}"> My Orders </a>
             </li>
+            {% endif %}
             {% if not request.user.is_authenticated or not request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'about' %}"> About </a>
             </li>
             {% endif %} 
+            {% if request.user.is_authenticated and request.user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link" href="#payment"> Payment </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#category"> Categories </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#order"> Order </a>
+            </li>
+            {% endif %}
           </ul>
 
           <!-- Search Bar -->

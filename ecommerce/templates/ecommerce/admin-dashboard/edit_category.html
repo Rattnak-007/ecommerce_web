@@ -1,0 +1,23 @@
+{% extends 'ecommerce/base.html' %}
+{% block title %}Edit Category{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2>Edit Category</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="name" class="form-label">Category Name</label>
+      <input type="text" name="name" id="name" class="form-control" value="{{ category.name }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="visible" class="form-label">Visible</label>
+      <select name="visible" id="visible" class="form-select">
+        <option value="true" {% if category.visible %}selected{% endif %}>Yes</option>
+        <option value="false" {% if not category.visible %}selected{% endif %}>No</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

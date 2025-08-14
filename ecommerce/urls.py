@@ -60,5 +60,12 @@ urlpatterns = [
     path('admin-dashboard/product/delete/<int:product_id>/', admin_delete_product, name='admin_delete_product'),
     path('admin-dashboard/feature-product/edit/<int:feature_product_id>/', admin_edit_feature_product, name='admin_edit_feature_product'),
     path('admin-dashboard/feature-product/delete/<int:feature_product_id>/', admin_delete_feature_product, name='admin_delete_feature_product'),
+    path('admin-dashboard/order/edit/<int:order_id>/', views.admin_edit_order, name='admin_edit_order'),
+    path('admin-dashboard/order/delete/<int:order_id>/', views.admin_delete_order, name='admin_delete_order'),
+    path('admin-dashboard/payment/edit/<int:payment_id>/', views.admin_edit_payment, name='admin_edit_payment'),
+    path('admin-dashboard/payment/delete/<int:payment_id>/', views.admin_delete_payment, name='admin_delete_payment'),
+    path('admin-dashboard/category/edit/<int:category_id>/', views.admin_edit_category, name='admin_edit_category'),
+    path('admin-dashboard/category/delete/<int:category_id>/', views.admin_delete_category, name='admin_delete_category'),
 ]
+
 

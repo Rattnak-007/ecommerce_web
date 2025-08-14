@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -16,334 +17,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-      /* Page title */
-      * {
-        font-family: "Poppins", sans-serif;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      :root {
-        --primary: #4361ee;
-        --primary-dark: #3a56d4;
-        --secondary: #ff6b6b;
-        --accent: #ffd166;
-        --dark: #2d3748;
-        --light: #f8f9fa;
-        --gray: #718096;
-        --light-gray: #e2e8f0;
-      }
-
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        padding-top: 65px; /* To compensate for fixed navbar */
-      }
-
-      /* Enhanced Navbar */
-      .navbar {
-        background: linear-gradient(
-          135deg,
-          var(--primary),
-          var(--primary-dark)
-        );
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        padding: 0.5rem 0;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1030;
-      }
-
-      .navbar-brand {
-        font-weight: 800;
-        font-size: 1.8rem;
-        letter-spacing: -0.5px;
-        color: white !important;
-        display: flex;
-        align-items: center;
-      }
-
-      .navbar-brand span {
-        color: var(--accent);
-      }
-
-      .navbar-nav .nav-link {
-        color: rgba(255, 255, 255, 0.85) !important;
-        font-weight: 500;
-        padding: 0.8rem 1.2rem;
-        position: relative;
-        transition: all 0.3s ease;
-        border-radius: 4px;
-        margin: 0 3px;
-      }
-
-      .navbar-nav .nav-link:hover,
-      .navbar-nav .nav-link.active {
-        color: white !important;
-        background: rgba(255, 255, 255, 0.15);
-      }
-
-      .navbar-nav .nav-link:hover::after,
-      .navbar-nav .nav-link.active::after {
-        content: "";
-        position: absolute;
-        bottom: 8px;
-        left: 15%;
-        width: 70%;
-        height: 2px;
-        background: var(--accent);
-        border-radius: 2px;
-      }
-
-      .navbar-toggler {
-        border: none;
-        color: white;
-        padding: 0.5rem;
-      }
-
-      .navbar-toggler:focus {
-        box-shadow: none;
-      }
-
-      .nav-buttons .btn-log {
-        padding: 0.5rem 1.2rem;
-        border-radius: 50px;
-        font-weight: 600;
-        margin-left: 0.5rem;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        border: 2px solid white;
-        background: transparent;
-        color: white;
-        box-shadow: none;
-      }
-
-      .nav-buttons .btn-log.btn-accent {
-        background: var(--accent);
-        color: var(--dark);
-        border: 2px solid var(--accent);
-      }
-
-      .nav-buttons .btn-log.btn-accent:hover {
-        background: #ffc233;
-        border-color: #ffc233;
-        color: var(--dark);
-      }
-
-      .nav-buttons .btn-log.btn-outline-light:hover {
-        background: white;
-        color: var(--primary);
-      }
-
-      .nav-buttons .btn-log::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-      }
-
-      .nav-buttons .btn-log:hover::before {
-        transform: translateX(0);
-      }
-
-      .btn-outline-light {
-        border: 2px solid white;
-        background: transparent;
-        color: white;
-      }
-
-      .btn-outline-light:hover {
-        background: white;
-        color: var(--primary);
-      }
-
-      .btn-accent {
-        background: var(--accent);
-        color: var(--dark);
-        border: 2px solid var(--accent);
-      }
-
-      .btn-accent:hover {
-        background: #ffc233;
-        border-color: #ffc233;
-        color: var(--dark);
-      }
-
-      .cart-icon {
-        position: relative;
-      }
-
-      .cart-count {
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        background: var(--secondary);
-        color: white;
-        font-size: 0.7rem;
-        font-weight: 700;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      /* Search bar */
-      .search-container {
-        position: relative;
-        margin: 0 1rem;
-        flex: 1;
-        max-width: 500px;
-      }
-
-      .search-container input {
-        width: 100%;
-        padding: 0.7rem 1.5rem 0.7rem 3rem;
-        border-radius: 50px;
-        border: none;
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
-        transition: all 0.3s ease;
-      }
-
-      .search-container input:focus {
-        outline: none;
-        background: rgba(255, 255, 255, 0.25);
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
-      }
-
-      .search-container input::placeholder {
-        color: rgba(255, 255, 255, 0.7);
-      }
-
-      .search-container i {
-        position: absolute;
-        left: 1.2rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.7);
-      }
-
-      /* User dropdown */
-      .dropdown.ms-2 .btn-outline-light.dropdown-toggle {
-        border: 2px solid white;
-        background: transparent;
-        color: white;
-        border-radius: 50px;
-        font-weight: 600;
-        padding: 0.5rem 1.2rem;
-        transition: all 0.3s ease;
-        box-shadow: none;
-      }
-
-      .dropdown.ms-2 .btn-outline-light.dropdown-toggle:hover,
-      .dropdown.ms-2 .btn-outline-light.dropdown-toggle:focus {
-        background: white;
-        color: var(--primary);
-        border-color: var(--primary);
-      }
-
-      .dropdown-menu {
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        padding: 0.5rem 0;
-        margin-top: 0.5rem;
-        min-width: 220px;
-        background: #fff;
-      }
-
-      .dropdown-item {
-        padding: 0.7rem 1.5rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        color: var(--dark);
-        border-radius: 8px;
-      }
-
-      .dropdown-item i {
-        width: 24px;
-        margin-right: 10px;
-        color: var(--gray);
-        font-size: 1.1rem;
-      }
-
-      .dropdown-item:hover,
-      .dropdown-item:focus {
-        background: rgba(67, 97, 238, 0.08);
-        color: var(--primary);
-      }
-
-      .dropdown-item:hover i,
-      .dropdown-item:focus i {
-        color: var(--primary);
-      }
-
-      .dropdown-divider {
-        border-top: 1px solid var(--light-gray);
-        margin: 0.5rem 0;
-      }
-
-      @media (max-width: 991px) {
-        .navbar-collapse {
-          padding: 1rem;
-          background: var(--primary-dark);
-          border-radius: 0 0 12px 12px;
-          margin-top: 0.5rem;
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .search-container {
-          margin: 1rem 0;
-          max-width: 100%;
-        }
-
-        .nav-buttons {
-          flex-direction: column;
-          gap: 0.5rem;
-          width: 100%;
-        }
-
-        .nav-buttons .btn-log {
-          width: 100%;
-          margin: 0.3rem 0;
-          text-align: center;
-        }
-
-        .navbar-nav .nav-link {
-          padding: 0.8rem 1rem;
-          margin: 0.2rem 0;
-        }
-
-        .dropdown.ms-2 {
-          width: 100%;
-        }
-
-        .dropdown.ms-2 .btn-outline-light.dropdown-toggle {
-          width: 100%;
-          margin-bottom: 0.5rem;
-        }
-
-        .dropdown-menu {
-          min-width: 100%;
-        }
-      }
-      .footer {
-        background: var(--dark);
-        color: rgba(255, 255, 255, 0.7);
-        padding: 4rem 0 2rem;
-      }
-    </style>
+    <link rel="stylesheet" href="{% static 'assets/Css/navbar.css' %} " />
   </head>
   <body>
     <!-- Enhanced Navbar -->
@@ -374,31 +48,26 @@
             <li class="nav-item">
               <a
                 class="nav-link{% if request.resolver_match.url_name == 'products' %} active{% endif %}"
-                href="{% url 'products' %}"> Products
+                href="{% url 'products' %}"
+              >
+                Products
               </a>
             </li>
-            {% endif %} 
-            {% if not request.user.is_authenticated or not request.user.is_staff %}
+            {% endif %} {% if request.user.is_authenticated and request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'categories' %}"> Categories </a>
             </li>
-            {% endif %}
-            {% if not request.user.is_authenticated or not request.user.is_staff %}
+            {% endif %} {% if not request.user.is_authenticated or not request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'orders' %}"> My Orders </a>
             </li>
-            {% endif %}
-            {% if not request.user.is_authenticated or not request.user.is_staff %}
+            {% endif %} {% if not request.user.is_authenticated or not request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'about' %}"> About </a>
             </li>
-            {% endif %} 
-            {% if request.user.is_authenticated and request.user.is_staff %}
+            {% endif %} {% if request.user.is_authenticated and request.user.is_staff %}
             <li class="nav-item">
               <a class="nav-link" href="#payment"> Payment </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#category"> Categories </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#order"> Order </a>
@@ -412,12 +81,11 @@
             <input type="text" placeholder="Search products..." />
           </div>
           <div class="nav-buttons d-flex ms-2">
-            {% if request.user.is_authenticated %}
-            {% if not request.user.is_authenticated or not request.user.is_staff %}
+            {% if request.user.is_authenticated %} {% if not request.user.is_authenticated or not request.user.is_staff %}
             <a href="{% url 'cart' %}" class="btn-log btn-outline-light">
               <i class="fas fa-shopping-cart"></i>
             </a>
-            {% endif %} 
+            {% endif %}
             <!-- User Dropdown -->
             <div class="dropdown ms-2">
               <a

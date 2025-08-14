@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Customer, Category, Product, Order, Payment, Cart, Feature_Product
-
+from .models import Customer, Category, Product, Order, Payment, Cart, CartItem, Feature_Product, SlideShow
+from django.contrib.auth.hashers import make_password, check_password
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
@@ -16,6 +16,21 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+class FeatureProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feature_Product
+        fields = '__all__'
+
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = '__all__'
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = '__all__'
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -26,22 +41,11 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = '__all__'
 
-class CartSerializer(serializers.ModelSerializer):
+class SlideShowSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cart
+        model = SlideShow
         fields = '__all__'
-
-class FeatureProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Feature_Product
-        fields = '__all__'
-
-
-
-from rest_framework import serializers
-from .models import Customer
-from django.contrib.auth.hashers import make_password, check_password
-
+        
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
@@ -51,7 +55,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data)
-
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()

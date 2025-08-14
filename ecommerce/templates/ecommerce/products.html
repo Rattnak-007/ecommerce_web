@@ -1,4 +1,6 @@
-{% extends 'ecommerce/base.html' %} {% block title %}Products{% endblock %} {% block content %}
+{% extends 'ecommerce/base.html' %}
+{% block title %}Products{% endblock %}
+{% block content %}
 <style>
   @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
   /* Page title */
@@ -133,6 +135,11 @@
   <!-- Category Filter Bar -->
   <div class="category-filter-bar mb-4">
     <a
+      href="{% url 'products' %}"
+      class="btn {% if not request.GET.type %}active{% endif %}"
+      >All</a
+    >
+    <a
       href="?type=products"
       class="btn {% if request.GET.type == 'products' %}active{% endif %}"
       >Products</a
@@ -140,147 +147,140 @@
     <a
       href="?type=feature"
       class="btn btn-feature {% if request.GET.type == 'feature' %}active{% endif %}"
-      >Feature</a
+      >Feature Products</a
     >
   </div>
   <div class="row">
-    {% if not request.GET.type %} {% for product in products %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-      <div class="card product-card h-100 shadow-sm">
-        <div class="product-image">
-          {% if product.image %}
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-          {% else %}
-          <img
-            src="https://via.placeholder.com/120?text=No+Image"
-            alt="No image"
-          />
-          {% endif %}
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title text-center">{{ product.name }}</h5>
-          <p class="card-text text-center">
-            {{ product.description|truncatechars:60 }}
-          </p>
-          <div
-            class="mt-auto d-flex justify-content-between align-items-center"
-          >
-            <span class="fw-bold text-primary">${{ product.price }}</span>
-            <a
-              href="{% url 'add_to_cart' product.product_id %}"
-              class="btn btn-sm btn-success"
-            >
-              <i class="fas fa-shopping-cart"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endfor %} {% for product in feature_products %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-      <div class="card product-card h-100 shadow-sm border-warning">
-        <div class="product-image">
-          {% if product.image %}
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-          {% else %}
-          <img
-            src="https://via.placeholder.com/120?text=No+Image"
-            alt="No image"
-          />
-          {% endif %}
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title text-center">{{ product.name }}</h5>
-          <p class="card-text text-center">
-            {{ product.description|truncatechars:60 }}
-          </p>
-          <div
-            class="mt-auto d-flex justify-content-between align-items-center"
-          >
-            {% if product.discount and product.discount > 0 %}
-            <span class="fw-bold text-danger"
-              >${{ product.discount|floatformat:2 }}</span
-            >
-            <span class="text-muted text-decoration-line-through"
-              >${{ product.price|floatformat:2 }}</span
-            >
+    {% if not request.GET.type %}
+      {% for product in products %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+        <div class="card product-card h-100 shadow-sm">
+          <div class="product-image">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
             {% else %}
-            <span class="fw-bold text-primary"
-              >${{ product.price|floatformat:2 }}</span
-            >
+            <img src="https://via.placeholder.com/120?text=No+Image" alt="No image" />
             {% endif %}
-            <a
-              href="{% url 'add_to_cart' product.Feature_Product_id %}"
-              class="btn btn-sm btn-warning"
-            >
-              <i class="fas fa-shopping-cart"></i>
-            </a>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-center">{{ product.name }}</h5>
+            <p class="card-text text-center">
+              {{ product.description|truncatechars:60 }}
+            </p>
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              <span class="fw-bold text-primary">${{ product.price }}</span>
+              <a href="{% url 'add_to_cart' product.product_id %}" class="btn btn-sm btn-success">
+                <i class="fas fa-shopping-cart"></i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    {% endfor %} {% if not products and not feature_products %}
-    <div class="col-12">
-      <p class="text-center no-products">No products available.</p>
-    </div>
-    {% endif %} {% elif request.GET.type == "feature" %} {% for product in feature_products %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-      <div class="card product-card h-100 shadow-sm border-warning">
-        <div class="product-image">
-          {% if product.image %}
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-          {% else %}
-          <img
-            src="https://via.placeholder.com/120?text=No+Image"
-            alt="No image"
-          />
-          {% endif %}
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title text-center">{{ product.name }}</h5>
-          <p class="card-text text-center">
-            {{ product.description|truncatechars:60 }}
-          </p>
-          <div
-            class="mt-auto d-flex justify-content-between align-items-center"
-          >
-            {% if product.discount and product.discount > 0 %}
-            <span class="fw-bold text-danger"
-              >${{ product.discount|floatformat:2 }}</span
-            >
-            <span class="text-muted text-decoration-line-through"
-              >${{ product.price|floatformat:2 }}</span
-            >
+      {% endfor %}
+      {% for product in feature_products %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+        <div class="card product-card h-100 shadow-sm border-warning">
+          <div class="product-image">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
             {% else %}
-            <span class="fw-bold text-primary"
-              >${{ product.price|floatformat:2 }}</span
-            >
+            <img src="https://via.placeholder.com/120?text=No+Image" alt="No image" />
             {% endif %}
-            <a
-              href="{% url 'add_to_cart' product.Feature_Product_id %}"
-              class="btn btn-sm btn-warning"
-            >
-              <i class="fas fa-shopping-cart"></i>
-            </a>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-center">{{ product.name }}</h5>
+            <p class="card-text text-center">
+              {{ product.description|truncatechars:60 }}
+            </p>
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              {% if product.discount and product.discount > 0 %}
+              <span class="fw-bold text-danger">${{ product.discount|floatformat:2 }}</span>
+              <span class="text-muted text-decoration-line-through">${{ product.price|floatformat:2 }}</span>
+              {% else %}
+              <span class="fw-bold text-primary">${{ product.price|floatformat:2 }}</span>
+              {% endif %}
+              <a href="{% url 'add_to_cart' product.Feature_Product_id %}" class="btn btn-sm btn-warning">
+                <i class="fas fa-shopping-cart"></i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    {% empty %}
-    <div class="col-12">
-      <p class="text-center no-products">No feature products available.</p>
-    </div>
-    {% endfor %} {% elif request.GET.type == "products" %} {% for product in products %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-      <div class="card product-card h-100 shadow-sm">
-        <div class="product-image">
-          {% if product.image %}
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-          {% else %}
-          <img
-            src="https://via.placeholder.com/120?text=No+Image"
-            alt="No image"
-          />
+      {% endfor %}
+      {% if not products and not feature_products %}
+      <div class="col-12">
+        <p class="text-center no-products">No products available.</p>
+      </div>
+      {% endif %}
+    {% elif request.GET.type == "feature" %}
+      {% for product in feature_products %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+        <div class="card product-card h-100 shadow-sm border-warning">
+          <div class="product-image">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            {% else %}
+            <img src="https://via.placeholder.com/120?text=No+Image" alt="No image" />
+            {% endif %}
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-center">{{ product.name }}</h5>
+            <p class="card-text text-center">
+              {{ product.description|truncatechars:60 }}
+            </p>
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              {% if product.discount and product.discount > 0 %}
+              <span class="fw-bold text-danger">${{ product.discount|floatformat:2 }}</span>
+              <span class="text-muted text-decoration-line-through">${{ product.price|floatformat:2 }}</span>
+              {% else %}
+              <span class="fw-bold text-primary">${{ product.price|floatformat:2 }}</span>
+              {% endif %}
+              <a href="{% url 'add_to_cart' product.Feature_Product_id %}" class="btn btn-sm btn-warning">
+                <i class="fas fa-shopping-cart"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center no-products">No feature products available.</p>
+      </div>
+      {% endfor %}
+    {% elif request.GET.type == "products" %}
+      {% for product in products %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+        <div class="card product-card h-100 shadow-sm">
+          <div class="product-image">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+            {% else %}
+            <img src="https://via.placeholder.com/120?text=No+Image" alt="No image" />
+            {% endif %}
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-center">{{ product.name }}</h5>
+            <p class="card-text text-center">
+              {{ product.description|truncatechars:60 }}
+            </p>
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              <span class="fw-bold text-primary">${{ product.price }}</span>
+              <a href="{% url 'add_to_cart' product.product_id %}" class="btn btn-sm btn-success">
+                <i class="fas fa-shopping-cart"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center no-products">No products available.</p>
+      </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
           {% endif %}
         </div>
         <div class="card-body d-flex flex-column">

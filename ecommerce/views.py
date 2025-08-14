@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Feature_Product, Category
+from .models import Product, Feature_Product, Category, SlideShow
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Customer, Category, Product, Order, Payment, Cart, CartItem, Feature_Product
@@ -212,11 +212,13 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        from .models import Product, Category
+        from .models import Product, Category, SlideShow
         featured_products = Feature_Product.objects.filter(is_available=True).order_by('-created_at')[:8]
         categories = Category.objects.filter(is_visible=True)
+        slides = SlideShow.objects.filter(is_active=True).order_by('order', 'created_at')
         context['featured_products'] = featured_products
         context['featured_categories'] = categories
+        context['slides'] = slides
         return context
 
 class AdminDashboardView(LoginRequiredMixin, TemplateView):

@@ -205,3 +205,21 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} of {self.product.name} in Cart #{self.cart_id}"
+
+
+class SlideShow(models.Model):
+    slideshow_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=300, blank=True)
+    image = models.ImageField(upload_to='slides/', null=True, blank=True)
+    button_text = models.CharField(max_length=100, blank=True)
+    button_url = models.URLField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'created_at']
+
+    def __str__(self):
+        return self.title

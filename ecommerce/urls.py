@@ -10,6 +10,7 @@ from .views import (
     admin_edit_feature_product, admin_delete_feature_product,
 )
 from . import views
+from . import serializers
 
 router = DefaultRouter()
 router.register('customers', CustomerViewSet)
